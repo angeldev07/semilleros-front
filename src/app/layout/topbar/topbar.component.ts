@@ -3,11 +3,13 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 import { LayoutService } from '../services/layout.service';
 import { RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
   imports: [
+    UserProfileComponent,
     RouterLink,
     NgClass
   ],
@@ -28,18 +30,9 @@ import { MenuItem } from 'primeng/api';
     </button>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-      <button class="p-link layout-topbar-button">
-          <i class="pi pi-calendar"></i>
-          <span>Calendar</span>
-      </button>
-      <button class="p-link layout-topbar-button">
-          <i class="pi pi-user"></i>
-          <span>Profile</span>
-      </button>
-      <button class="p-link layout-topbar-button" [routerLink]="'/documentation'">
-          <i class="pi pi-cog"></i>
-          <span>Settings</span>
-      </button>
+      
+      <app-user-profile />
+
     </div>
   </div>
   

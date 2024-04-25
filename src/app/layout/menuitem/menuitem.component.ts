@@ -24,10 +24,10 @@ import { MenuService } from '../menu/menu.service';
           <i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="item.items"></i>
         </a>
         <a *ngIf="(item.routerLink && !item.items) && item.visible !== false" (click)="itemClick($event)" [ngClass]="item.class" 
-          [routerLink]="item.routerLink" routerLinkActive="active-route" [routerLinkActiveOptions]="item.routerLinkActiveOptions||{ paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' }"
+          [routerLink]="item.routerLink" routerLinkActive="active-route bg-blue-500 text-white active" [routerLinkActiveOptions]="item.routerLinkActiveOptions||{ paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' }"
           [fragment]="item.fragment" [queryParamsHandling]="item.queryParamsHandling" [preserveFragment]="item.preserveFragment" 
           [skipLocationChange]="item.skipLocationChange" [replaceUrl]="item.replaceUrl" [state]="item.state" [queryParams]="item.queryParams"
-          [attr.target]="item.target" tabindex="0" pRipple>
+          [attr.target]="item.target" tabindex="0" pRipple class="mb-3 p-3">
           <i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
           <span class="layout-menuitem-text">{{item.label}}</span>
           <i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="item.items"></i>
@@ -39,8 +39,17 @@ import { MenuService } from '../menu/menu.service';
           </ng-template>
         </ul>
     </ng-container>
-  
-  
+  `,
+  styles: `
+    .active::before { 
+        content: '';
+        width: 4px;
+        height: 38px;
+        background-color: #619cfd;
+        position: fixed;
+        left: 28px;
+        border-radius: 0 5px 5px 0;
+    }
   
   `,
   animations: [
