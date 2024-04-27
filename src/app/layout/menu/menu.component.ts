@@ -39,7 +39,7 @@ export class MenuComponent implements OnInit {
       {
         label: 'Navegación',
         items: [
-          { label: 'Eventos', icon: 'pi pi-fw pi-calendar', routerLink: ['/'] },
+          { label: 'Eventos', icon: 'pi pi-fw pi-calendar', routerLink: ['./eventos'] },
           { label: 'Publicaciones', icon: 'pi pi-fw pi-map', routerLink: ['./publicaciones'] },
           { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['./usuarios'] },
           { label: 'Multimedia', icon: 'pi pi-fw pi-camera', routerLink: ['./multimedia'] },
