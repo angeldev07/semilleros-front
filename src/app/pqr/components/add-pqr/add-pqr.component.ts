@@ -9,8 +9,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { PQR, Semilleros } from '../../api/pqr';
+import { PQR } from '../../api/pqr';
 import { ButtonModule } from 'primeng/button';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-add-pqrs',
@@ -22,6 +23,7 @@ import { ButtonModule } from 'primeng/button';
     ButtonModule,
     RadioButtonModule,
     ReactiveFormsModule,
+    InputTextareaModule,
     TabViewModule,
     TableModule,
     DropdownModule,
@@ -29,14 +31,33 @@ import { ButtonModule } from 'primeng/button';
     ToastModule,
   ],
   template: `
-  <div class="mx-auto border-black border-2 w-72">
-          <div class="bg-black">
-            <h1 class="text-white">PQRS</h1>
-          </div>
+    <p-dialog
+        header="Crear Radicado PQR"
+          [modal]="true"
+          [draggable]="false"
+          [resizable]="false"
+          [(visible)]="visible"
+          (onHide)="visibleChange.emit(false)"
+          [style]="{ width: '50rem' }"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    >
           <form
             [formGroup]="pqrsForm"
             (ngSubmit)="submitPqrs()"
           >
+          <div class="mb-3">
+                <label for="tipoPqrs" class="font-semibold block mb-2"
+                    >Tipo de Solicitud</label
+                >
+                @for(tipo of tiposPQRS; track tipo.key){
+                  <input class="m-2 border-round-sm" type="button" severity="secondary" pButton (click)="selectTipoPQRS(tipo.key)" [value]="tipo.name">
+                }
+                <!-- @if (validateInput('tipoPqrs')) {
+                <span class="text-red-500 text-md block p-2"
+                     >Escoge el tipo de solicitud</span
+                >
+                } -->
+            </div>
           <div class="mb-3">
                 <label for="title" class="font-semibold block mb-2"
                     >Título</label
@@ -58,16 +79,17 @@ import { ButtonModule } from 'primeng/button';
                 <label for="desc" class="font-semibold block mb-2"
                     >Descripcion</label
                 >
-                <input
-                    id="desc"
-                    type="text"
-                    formControlName="desc"
-                    pInputText
-                    class="w-full"
-                />
+                <textarea
+                  rows="5"
+                  cols="30"
+                  pInputTextarea
+                  [autoResize]="true"
+                  formControlName="desc"
+                  class="w-full">
+              </textarea>
                 @if (validateInput('desc')) {
                 <span class="text-red-500 text-md block p-2"
-                     >El desc es obligatorio</span
+                     >La descripción del problema es obligatoria</span
                 >
                 }
             </div>
@@ -90,18 +112,18 @@ import { ButtonModule } from 'primeng/button';
             </div>
             <div class="mb-3">
                 <label for="anonimo" class="font-semibold block mb-2"
-                    >Anonimo?</label
+                    >¿Desea enviar el PQRS anonimamente?</label
                 >
                     @for(option of anonimous; track option.key){
                       <p-radioButton [inputId]="option.key" [value]="option.key" formControlName="anonimo"
                       (onClick)="togglePersonalInfo(option.key)"></p-radioButton>
-                      <label [for]="option.key" class="ml-2">{{ option.name }}</label>
-              }
-                @if (validateInput('anonimo')) {
-                <span class="text-red-500 text-md block p-2"
-                     >Esta seleccion es obligatorio</span
+                      <label [for]="option.key" class="mx-3 mt-2">{{ option.name }}</label>
+                    }
+                    @if (validateInput('anonimo')) {
+                    <span class="text-red-500 text-md block p-2"
+                        >Esta seleccion es obligatorio</span
                 >
-                }
+                    }
             </div>
             @if (showPersonalInfo) {
             <div class="mb-3">
@@ -156,34 +178,13 @@ import { ButtonModule } from 'primeng/button';
                 }
             </div>
               }
-            <div class="mb-3">
-                <label for="semillero" class="font-semibold block mb-2"
-                    >semillero</label
-                >
-                <p-dropdown formControlName="semillero" [options]="semilleros" optionLabel="name" optionValue="id" placeholder="Selecciona un semillero"></p-dropdown>
-
-                @if (validateInput('semillero')) {
-                <span class="text-red-500 text-md block p-2"
-                     >El semillero es obligatorio</span
-                >
-                }
-            </div>
-            <div class="mb-3">
-                <label for="tipoPqrs" class="font-semibold block mb-2"
-                    >tipoPqrs</label
-                >
-                <p-dropdown formControlName="tipoPqrs" [options]="tiposPQRS" optionLabel="name" optionValue="key" placeholder="Selecciona el tipo"></p-dropdown>
-                @if (validateInput('tipoPqrs')) {
-                <span class="text-red-500 text-md block p-2"
-                     >El tipoPqrs es obligatorio</span
-                >
-                }
-            </div>
-            <div class="card flex justify-content-center">
-                <p-button label="Check" icon="pi pi-check" (onClick)="submitPqrs()"></p-button>
-            </div>
           </form>
-    </div>
+          <ng-template pTemplate="footer">
+          <div class="card flex justify-content-center">
+                <p-button label="Enviar" icon="pi pi-check" (onClick)="submitPqrs()"></p-button>
+            </div>
+          </ng-template>
+    </p-dialog>
   `,
       styles: `
       :host {
@@ -193,30 +194,37 @@ import { ButtonModule } from 'primeng/button';
         changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddPqrsComponent implements OnInit{
-  @Input() semilleros: Semilleros[] = [];
-  @Output() savePQRS = new EventEmitter<{pqrs: PQR, semillero: string}>();
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() savePQRS = new EventEmitter<PQR>();
 
   showPersonalInfo : boolean = true;
+  pqrsTypes: number = 0;
   anonimous = [ { key: 'true', name: 'Si' }, { key: 'false', name: 'No' } ];
   tiposPQRS = [
     {
       key: 1,
-      name: 'Queja',
+      name: 'Petición',
     },
     {
       key: 2,
-      name: 'Reclamo',
+      name: 'Queja',
     },
     {
       key: 3,
-      name: 'Sugerencia',
+      name: 'Reclamo',
     },
     {
       key: 4,
-      name: 'Peticion',
+      name: 'Sugerencia',
     }
   ]
   pqrs : PQR | undefined = undefined;
+
+  selectTipoPQRS(tipoKey: number) {
+    this.pqrsTypes = tipoKey;
+    console.log(this.pqrsTypes);
+  }
 
   pqrsForm = this.fb.group({
     title: ['', [Validators.required]],
@@ -227,14 +235,14 @@ export class AddPqrsComponent implements OnInit{
     apellido: [''],
     dni: [''],
     semillero: ['', [Validators.required]],
-    tipoPqrs: ['', [Validators.required]],
+    tipoPqrs: [this.tiposPQRS[0].key]
 });
 
 
 constructor(private fb: FormBuilder) {}
 
 ngOnInit(): void {
-    this.showPersonalInfo = true;
+    this.showPersonalInfo = false;
     if(!!this.pqrs) {
         this.pqrsForm.patchValue({
             title: this.pqrs.titulo,
@@ -273,11 +281,11 @@ public validateInput(input: string) {
 }
 
 public submitPqrs() {
-    if (this.pqrsForm.invalid) {
-        this.pqrsForm.markAllAsTouched();
-        this.pqrsForm.markAsDirty();
-        return;
-    }
+    // if (this.pqrsForm.invalid) {
+    //     this.pqrsForm.markAllAsTouched();
+    //     this.pqrsForm.markAsDirty();
+    //     return;
+    // }
 
     const pqrs: PQR = {
       titulo: this.pqrsForm.get('title')?.value ?? '',
@@ -287,13 +295,12 @@ public submitPqrs() {
       nombre: this.pqrsForm.get('nombre')?.value ?? '',
       apellido: this.pqrsForm.get('apellido')?.value ?? '',
       cedula: this.pqrsForm.get('dni')?.value ?? '',
-      tipoPqrs: this.pqrsForm.get('tipoPqrs')?.value ?? '',
+      tipoPqrs: this.pqrsTypes,
     };
 
-  const semillero = this.pqrsForm.get('semillero')?.value ?? ''
-
-    this.savePQRS.emit({pqrs, semillero});
-    // this.visibleChange.emit(false)
+    console.log(pqrs);
+    this.savePQRS.emit(pqrs);
+    this.visibleChange.emit(false)
 }
 
 }

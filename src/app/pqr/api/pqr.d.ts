@@ -2,7 +2,7 @@ export interface PQR {
   titulo: string,
   descripcion: string,
   correo: string,
-  tipoPqrs: string,
+  tipoPqrs: number,
   anonimo: boolean,
   nombre?: string,
   apellido?: string,

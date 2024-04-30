@@ -14,22 +14,19 @@ export class PqrsService {
     return this.http.get(`${environment.api}/pqrs`);
   }
 
-  savePqrs(pqrs: PQR, semillero: any) {
+  savePqrs(pqrs: PQR) {
     const url = `${environment.api}/pqrs/create`;
-    const params = { semilleroID: semillero, tipoPQRSID: 1 };
+    const params = { tipoPQRSID: pqrs.tipoPqrs };
     return this.http.post<PQR>(url, pqrs, { params });
   }
 
-  deletePqrs(id: string) {
-    return this.http.delete(`${environment.api}/pqrs/${id}`);
+  deletePqrs(id: number) {
+    const params = { pqrsID: id }
+    return this.http.delete(`${environment.api}/pqrs/delete`, { params });
   }
 
   changeStatePqrs(id: string, state: string) {
     return this.http.put(`${environment.api}/pqrs/${id}`, { state });
-  }
-
-  getSemilleros(){
-    return this.http.get(`${environment.api}/semilleros`);
   }
 
 }

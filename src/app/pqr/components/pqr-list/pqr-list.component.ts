@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { PQR } from '../../api/pqr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -29,20 +29,17 @@ import { Message } from 'primeng/api';
             [(selection)]="selectedPQRS"
             [rowsPerPageOptions]="[5, 10, 20]"
             [globalFilterFields]="['name']"
+            dataKey="id"
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 3rem">
-                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                    </th>
-                    <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+                    <th pSortableColumn="id" style="width: 3rem">ID <p-sortIcon field="id" /></th>
                     <th pSortableColumn="title">Título <p-sortIcon field="title" /></th>
-                    <th pSortableColumn="desc">Descripción <p-sortIcon field="desc" /></th>
+                    <th pSortableColumn="desc" style="width: 200px;">Descripción <p-sortIcon field="desc" /></th>
                     <th pSortableColumn="dateRad">Fecha Radicado <p-sortIcon field="dateRad" /></th>
                     <th pSortableColumn="stateRad">Estado <p-sortIcon field="stateRad" /></th>
                     <th pSortableColumn="email">Correo <p-sortIcon field="email" /></th>
                     <th pSortableColumn="typePqrs">Tipo PQRS <p-sortIcon field="typePqrs" /></th>
-                    <th pSortableColumn="semi">Semillero <p-sortIcon field="semi" /></th>
                     <th pSortableColumn="radCode">Código Radicado <p-sortIcon field="radCode" /></th>
                     <th pSortableColumn="anonimo">Anónimo <p-sortIcon field="anonimo" /></th>
                     <th pSortableColumn="name">Nombre <p-sortIcon field="name" /></th>
@@ -51,32 +48,31 @@ import { Message } from 'primeng/api';
                     <th >Acciones</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-customer>
+            <ng-template pTemplate="body" let-pqrsLista let-expanded="expanded">
                 @if (pqrs.length > 0) {
                 <tr>
-                    <th>
-                        <p-tableCheckbox [value]="customer"></p-tableCheckbox>
-                    </th>
-                    <td>{{ customer.id }}</td>
-                    <td>{{ customer.titulo }}</td>
-                    <td>{{ customer.descripcion }}</td>
-                    <td>{{ customer.fechaRadicado | date }}</td>
-                    <td>{{ customer.estadoRadicado.estado }}</td>
-                    <td>{{ customer.correo }}</td>
-                    <td>{{ customer.tiposPqrs.tipo }}</td>
-                    <td>{{ customer.semillero.name }}</td>
-                    <td>{{ customer.codigoRadicado }}</td>
-                    <td>{{ customer.anonimo }}</td>
-                    <td>{{ customer.nombre }}</td>
-                    <td>{{ customer.apellido }}</td>
-                    <td>{{ customer.cedula }}</td>
+                    <td>{{ pqrsLista.id }}</td>
+                    <td>{{ pqrsLista.titulo }}</td>
+                    <!-- <td>{{ pqrsLista.descripcion }}</td> -->
+                    <td style="max-width: 200px; word-wrap: break-word;">
+                {{pqrsLista.descripcion}}
+            </td>
+                    <td>{{ pqrsLista.fechaRadicado | date }}</td>
+                    <td>{{ pqrsLista.estadoRadicado.estado }}</td>
+                    <td>{{ pqrsLista.correo }}</td>
+                    <td>{{ pqrsLista.tiposPqrs.tipo }}</td>
+                    <td>{{ pqrsLista.codigoRadicado }}</td>
+                    <td>{{ pqrsLista.anonimo }}</td>
+                    <td>{{ pqrsLista.nombre }}</td>
+                    <td>{{ pqrsLista.apellido }}</td>
+                    <td>{{ pqrsLista.cedula }}</td>
                     <td>
-                        <!-- <button
+                        <button
                             pButton
                             icon="pi pi-trash"
                             class="p-button-rounded p-button-danger"
-                            (click)="deleteCustomer.emit(customer.id)"
-                        ></button> -->
+                            (click)="deletePQRS.emit(pqrsLista.id)"
+                        ></button>
                     </td>
                 </tr>
                 }
@@ -98,6 +94,7 @@ import { Message } from 'primeng/api';
 })
 export class PqrsListComponent {
   @Input() pqrs: PQR[] = [];
+  @Output() deletePQRS = new EventEmitter<number>();
 
   selectedPQRS!: any;
   messages: Message[] = [{ severity: 'info', summary: 'Lista vacia', detail: 'No hay pqrs por mostrar' }];
