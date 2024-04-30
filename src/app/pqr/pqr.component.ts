@@ -12,7 +12,8 @@ import { ButtonModule } from 'primeng/button';
   imports: [
     ButtonModule,
     PqrsListComponent,
-    AddPqrsComponent],
+    AddPqrsComponent
+  ],
   template: `
           <section
         class="card flex justify-content-between align-items-center px-4"
@@ -30,6 +31,7 @@ import { ButtonModule } from 'primeng/button';
         <app-pqrs-list
             [pqrs]="pqrsLista"
             (deletePQRS)="deletePQRS($event)"
+            (changeStatePQRS)="changeStatePQRS($event.id, $event.state)"
         ></app-pqrs-list>
         </section>
         @if (openAddPQRDialog) {
@@ -45,6 +47,7 @@ import { ButtonModule } from 'primeng/button';
 })
 export class PqrComponent implements OnInit{
   openAddPQRDialog = false;
+  nextState = '';
   pqrsList = signal<PQR[]>([]);
   selectedPQRS = signal<PQR | null | number[]>(null);
 
@@ -106,7 +109,7 @@ export class PqrComponent implements OnInit{
         next: () => {
             this.getPQRSList();
             this.message.clear();
-            this.message.add({ severity: 'success', summary: 'Eliminado', detail: 'Se ha eliminado el cliente con éxito' });
+            this.message.add({ severity: 'success', summary: 'Eliminado', detail: 'Se ha eliminado el radicado con éxito' });
         },
         error: (err) => {
             this.message.clear();
@@ -114,6 +117,26 @@ export class PqrComponent implements OnInit{
             console.log(err);
         },
     });
+}
+
+changeStatePQRS(id: number, state: string){
+  if(state === 'PENDIENTE'){
+    this.nextState = 'revision';
+  }else{
+    this.nextState = 'resuelto';
+  }
+  this.pqrsService.changeStatePqrs(id, this.nextState).subscribe({
+    next: () => {
+      this.getPQRSList();
+      this.message.clear();
+      this.message.add({ severity: 'success', summary: 'Actualizado', detail: 'Se ha actualizado el estado del radicado con éxito' });
+    },
+    error: (err) => {
+      this.message.clear();
+      this.message.add({ severity: 'error', summary: 'Error :(', detail: 'Ha ocurrido un error inesperado. Intentelo de nuevo' });
+      console.log(err);
+    }
+  })
 }
 
 

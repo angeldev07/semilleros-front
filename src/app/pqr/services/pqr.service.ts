@@ -25,8 +25,9 @@ export class PqrsService {
     return this.http.delete(`${environment.api}/pqrs/delete`, { params });
   }
 
-  changeStatePqrs(id: string, state: string) {
-    return this.http.put(`${environment.api}/pqrs/${id}`, { state });
+  changeStatePqrs(id: number, state: string) {
+    // const params = { pqrsId: id }
+    return this.http.post(`${environment.api}/pqrs/${state}?pqrsId=${id}`, {});
   }
 
 }

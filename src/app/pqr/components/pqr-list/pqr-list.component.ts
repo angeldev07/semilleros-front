@@ -69,6 +69,12 @@ import { Message } from 'primeng/api';
                     <td>
                         <button
                             pButton
+                            icon="pi pi-question"
+                            class="p-button-rounded p-button-info"
+                            (click)="changeStatePQRS.emit({ id: pqrsLista.id, state: pqrsLista.estadoRadicado.estado })"
+                        ></button>
+                        <button
+                            pButton
                             icon="pi pi-trash"
                             class="p-button-rounded p-button-danger"
                             (click)="deletePQRS.emit(pqrsLista.id)"
@@ -81,6 +87,8 @@ import { Message } from 'primeng/api';
         } @else {
           <p-messages [value]="messages" [enableService]="false" [closable]="false"></p-messages>
         }
+
+
   `,
     styles: `
     :host {
@@ -95,6 +103,9 @@ import { Message } from 'primeng/api';
 export class PqrsListComponent {
   @Input() pqrs: PQR[] = [];
   @Output() deletePQRS = new EventEmitter<number>();
+  @Output() changeStatePQRS = new EventEmitter<{ id: number, state: string }>();
+
+
 
   selectedPQRS!: any;
   messages: Message[] = [{ severity: 'info', summary: 'Lista vacia', detail: 'No hay pqrs por mostrar' }];
