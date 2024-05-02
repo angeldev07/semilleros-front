@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compartir Publicaciones y Generar Reportes</title>
+    <style>
+        /* Estilos CSS para la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .post {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .report {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <h2>{{titulo}}</h2>
+    <div id="reports">
+        <!-- Aquí se mostrarán los reportes -->
+        <div class="report">
+            <h3>Publicaciones en el mes</h3>
+            <p>Cantidad de publicaciones: {{cant_publicaciones}}</p>
+        </div>
+        <div class="report">
+            <h3>Estudiantes matriculados en el mes</h3>
+            <p>Cantidad de estudiantes: {{alumnosMes}}</p>
+        </div>
+    </div>
+
+    <script>
+        // Aquí puedes agregar la lógica JavaScript para cargar las publicaciones y generar los reportes
+    </script>
+</body>
+</html>

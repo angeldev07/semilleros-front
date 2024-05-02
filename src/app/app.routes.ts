@@ -33,6 +33,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./configuracion/configuracion.routes').then(m => m.CONFIGURACION_ROUTES)
             },
             {
+              path: 'reportes',
+              loadChildren: () => import('./reportes/reportes.routes').then(m => m.REPORTES_ROUTES)
+          },
+            {
                 path: 'pqr',
                 loadChildren: () => import('./pqr/pqr.routes').then(m => m.PQR_ROUTES)
             },
