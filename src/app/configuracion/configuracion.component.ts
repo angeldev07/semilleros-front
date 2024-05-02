@@ -5,13 +5,104 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-    <p>
-      configuracion works!
-    </p>
+    <div>
+      <h2>Registro de Semillero</h2>
+      <form (submit)="guardarRegistro()">
+        <div class="form-section">
+          <div class="section-title">Información General</div>
+          <div class="form-group">
+            <label for="logo">Logo o Imagen:</label>
+            <input type="file" id="logo" accept="image/*" (change)="onFileSelected($event)">
+          </div>
+          <div class="form-group">
+            <label for="nombre">Nombre del Semillero:</label>
+            <input type="text" id="nombre" #nombre required>
+          </div>
+          <div class="form-group">
+            <label for="sigla">Sigla del Semillero:</label>
+            <input type="text" id="sigla" #sigla required>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-title">Descripción</div>
+          <div class="form-group">
+            <label for="mision">Misión:</label>
+            <textarea id="mision" #mision required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="vision">Visión:</label>
+            <textarea id="vision" #vision required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="palabrasClave">Palabras Clave:</label>
+            <input type="text" id="palabrasClave" #palabrasClave required>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-title">Contacto</div>
+          <div class="form-group">
+            <label for="director">Director del Semillero:</label>
+            <input type="text" id="director" #director required>
+          </div>
+          <div class="form-group">
+            <label for="whatsapp">Whatsapp:</label>
+            <input type="text" id="whatsapp" #whatsapp required>
+          </div>
+          <div class="form-group">
+            <label for="instagram">Instagram:</label>
+            <input type="text" id="instagram" #instagram required>
+          </div>
+          <div class="form-group">
+            <label for="facebook">Facebook:</label>
+            <input type="text" id="facebook" #facebook required>
+          </div>
+          <div class="form-group">
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" id="correo" #correo required>
+          </div>
+        </div>
+
+        <button type="submit">Guardar</button>
+      </form>
+    </div>
   `,
-  styles: ``,
+  styles: [`
+    .form-section {
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+    .section-title {
+      background-color: #f0f0f0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfiguracionComponent {
+  guardarRegistro(): void {
+    const nombre = (document.getElementById('nombre') as HTMLInputElement).value;
+    const sigla = (document.getElementById('sigla') as HTMLInputElement).value;
+    const mision = (document.getElementById('mision') as HTMLTextAreaElement).value;
+    const vision = (document.getElementById('vision') as HTMLTextAreaElement).value;
+    const palabrasClave = (document.getElementById('palabrasClave') as HTMLInputElement).value;
+    const director = (document.getElementById('director') as HTMLInputElement).value;
+    const whatsapp = (document.getElementById('whatsapp') as HTMLInputElement).value;
+    const instagram = (document.getElementById('instagram') as HTMLInputElement).value;
+    const facebook = (document.getElementById('facebook') as HTMLInputElement).value;
+    const correo = (document.getElementById('correo') as HTMLInputElement).value;
 
+    console.log('Registro guardado:', { nombre, sigla, mision, vision, palabrasClave, director, whatsapp, instagram, facebook, correo });
+  }
+
+  onFileSelected(event: any): void {
+    // Lógica para manejar la selección de archivo
+  }
 }
