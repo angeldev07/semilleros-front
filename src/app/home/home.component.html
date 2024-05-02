@@ -1,0 +1,55 @@
+<header class="w-full m-0 p-0 mb-6">
+    <section class="px-4 pt-2">
+        <ul class="list-none flex gap-4 justify-content-end">
+        <li class="cursor-pointer">
+            <i class="pi pi-facebook text-2xl text-blue-500"></i>
+        </li>
+        <li class="cursor-pointer">
+            <i class="pi pi-twitter text-2xl text-blue-300"></i>
+        </li>
+        <li class="cursor-pointer">
+            <i class="pi pi-instagram text-2xl text-red-300"></i>
+        </li>
+        <li class="cursor-pointer">
+            <i class="pi pi-youtube text-2xl text-red-500"></i>
+        </li>
+        </ul>
+    </section>
+
+    <nav
+        class="bg-black-alpha-70 flex justify-content-between align-items-center px-4"
+    >
+        <a
+        [routerLink]="['/']"
+        class="inline-block  text-white underline py-3 px-4 inicio"
+        >
+        Inicio
+        </a>
+
+        <ul class=" flex align-items-center list-none p-0 m-0 gap-3">
+        @for (option of options; track $index) {
+        <li>
+            <a
+            [routerLink]="option.routerLink"
+            class="inline-block text-black py-3 px-4 text-white hover:underline transition-all transition-duration-100"
+            >
+            {{ option.label }}
+            </a>
+        </li>
+        }
+        </ul>
+
+        <div>
+        <a
+            [routerLink]="['/admin']"
+            class="inline-block  text-white py-3 px-4 inicio hover:bg-red-600 transition-all transition-duration-100"
+        >
+            Iniciar sesion
+            <i class="pi pi-sign-in"></i>
+        </a>
+        </div>
+    </nav>
+</header>
+
+
+<router-outlet/>

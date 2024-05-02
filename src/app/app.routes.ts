@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
+import { LoginComponent } from './auth/login/login.component';
+import { HomeComponent } from './home/home.component';
+import { PostViewComponent } from './home/post-view/post-view.component';
 
 export const routes: Routes = [
     {
-        path: '', component: LayoutComponent,
+        path: 'admin', component: LayoutComponent,
         children: [
             {
                 path: 'eventos',
@@ -33,6 +36,20 @@ export const routes: Routes = [
                 path: 'pqr',
                 loadChildren: () => import('./pqr/pqr.routes').then(m => m.PQR_ROUTES)
             },
+            {
+                path:'',
+                pathMatch: 'full',
+                redirectTo: 'publicaciones'
+            }
         ]
+    },
+    {
+        path: 'auth',
+        component: LoginComponent
+    },
+    {
+        path: '',
+        component: HomeComponent,
+        loadChildren: () => import('./home/home.routes').then(h => h.HOME_ROUTES)
     },
 ];
