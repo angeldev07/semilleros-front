@@ -46,6 +46,7 @@ export class MenuComponent implements OnInit {
           { label: 'Capacitaciones', icon: 'pi pi-fw pi-flag-fill', routerLink: ['./capacitaciones'] },
           { label: 'Configuracion', icon: 'pi pi-fw pi-cog', routerLink: ['./configuracion'] },
           { label: 'PQR', icon: 'pi pi-fw pi-qrcode', routerLink: ['./pqr'] },
+          { label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['./reportes'] },
         ],
       }
     ];

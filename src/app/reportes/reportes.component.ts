@@ -9,9 +9,19 @@ import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';
   ],
   templateUrl: './reportes.component.html',
   styles: `
-    :host {
-      display: block;
-    }
+  h2 {
+      text-align: center;
+  }
+  .post {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
+  .report {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+  }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
