@@ -39,12 +39,13 @@ export class MenuComponent implements OnInit {
       {
         label: 'Navegación',
         items: [
+          { label: 'Configuracion', icon: 'pi pi-fw pi-cog', routerLink: ['./configuracion'] },
+          { label: 'Semilleros', icon: 'pi pi-fw pi-briefcase', routerLink: ['./semilleros'] },
           { label: 'Eventos', icon: 'pi pi-fw pi-calendar', routerLink: ['./eventos'] },
           { label: 'Publicaciones', icon: 'pi pi-fw pi-map', routerLink: ['./publicaciones'] },
           { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['./usuarios'] },
           { label: 'Multimedia', icon: 'pi pi-fw pi-camera', routerLink: ['./multimedia'] },
           { label: 'Capacitaciones', icon: 'pi pi-fw pi-flag-fill', routerLink: ['./capacitaciones'] },
-          { label: 'Configuracion', icon: 'pi pi-fw pi-cog', routerLink: ['./configuracion'] },
           { label: 'PQR', icon: 'pi pi-fw pi-qrcode', routerLink: ['./pqr'] },
           { label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['./reportes'] },
         ],
