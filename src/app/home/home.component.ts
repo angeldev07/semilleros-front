@@ -43,6 +43,10 @@ export class HomeComponent {
       label: 'Normatividad',
       routerLink: ['']
     },
+    {
+      label: 'Redes Sociales ',
+      routerLink: ['']
+    },
   ]
 
   recentPost = signal<any>({

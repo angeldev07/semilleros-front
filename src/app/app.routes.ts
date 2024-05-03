@@ -48,6 +48,10 @@ export const routes: Routes = [
                 path: 'normatividad',
                 loadChildren: () => import('./normatividad/normatividad-routing.module').then(m => m.NormatividadRoutingModule)
             },
+            {    
+                 path: 'redes-sociales',
+                 loadChildren: () => import('./redes-sociales/redes-sociales.routes').then(m => m.REDES_SOCIALES_ROUTES)
+            },
             {
                 path:'',
                 pathMatch: 'full',

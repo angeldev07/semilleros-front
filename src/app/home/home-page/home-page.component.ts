@@ -185,7 +185,7 @@ export class HomePageComponent implements OnInit {
   constructor(private postService: PostHomeService, private router: Router) { }
 
   ngOnInit() {
-    
+
     this.postService.getPostRecientes().subscribe({
       next: (data) => {
         this.recentPost.set({
