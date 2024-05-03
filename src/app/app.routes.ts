@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './home/home.component';
-import { PostViewComponent } from './home/post-view/post-view.component';
+
 
 export const routes: Routes = [
     {
@@ -43,6 +43,10 @@ export const routes: Routes = [
             {
                 path: 'semilleros',
                 loadChildren: () => import('./semilleros/semilleros.routes').then(m => m.SEMILLEROS_ROUTES)
+            },
+            {
+                path: 'normatividad',
+                loadChildren: () => import('./normatividad/normatividad-routing.module').then(m => m.NormatividadRoutingModule)
             },
             {
                 path:'',

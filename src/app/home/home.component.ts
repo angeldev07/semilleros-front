@@ -35,6 +35,10 @@ export class HomeComponent {
       label: 'PQR',
       routerLink: ['']
     },
+    {
+      label: 'Normatividad',
+      routerLink: ['']
+    },
   ]
 
   recentPost = signal<any>({
