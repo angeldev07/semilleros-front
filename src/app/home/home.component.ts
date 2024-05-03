@@ -35,6 +35,10 @@ export class HomeComponent {
       label: 'PQR',
       routerLink: ['']
     },
+    {
+      label: 'Redes Sociales ',
+      routerLink: ['']
+    },
   ]
 
   recentPost = signal<any>({
@@ -45,7 +49,7 @@ export class HomeComponent {
   constructor(private postService: PostHomeService, private router: Router) { }
 
   ngOnInit() {
-    
+
     this.postService.getPostRecientes().subscribe({
       next: (data) => {
         this.recentPost.set({

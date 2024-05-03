@@ -1,0 +1,95 @@
+
+.social-media {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-media h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.social-media p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.social-media ul {
+  list-style: none;
+  padding: 0;
+}
+
+.social-media ul li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.social-media ul li:last-child {
+  margin-right: 0;
+}
+
+.social-media ul li a {
+  color: #000;
+  text-decoration: none;
+}
+
+.social-media .btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.social-media .btn:hover {
+  background-color: #0056b3;
+}
+
+.social-media {
+  position: relative;
+  margin-top: 50px;
+}
+
+.btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+.social-media {
+  margin-top: 50px;
+}
+
+.social-media p {
+  margin-bottom: 100px;
+}
+
+.social-media article {
+  margin-top: 130px;
+}
+
+.btn {
+  margin-bottom: 20px;
+}
+
+
+.social-icons li {
+  display: inline-block;
+  margin-right: 20px; /* Ajusta el margen entre los botones según sea necesario */
+}
+
+.social-icons li a {
+  display: inline-block;
+  padding: 10px; /* Ajusta el tamaño del área de clic */
+  font-size: 40px; /* Ajusta el tamaño del texto */
+  text-decoration: none;
+}
+
+.social-icons li a i {
+  font-size: 60px; /* Ajusta el tamaño del ícono */
+  vertical-align: middle;
+}

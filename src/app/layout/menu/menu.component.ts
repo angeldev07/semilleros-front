@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/button';
           <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
           <li *ngIf="item.separator" class="menu-separator"></li>
       </ng-container>
-      
+
       <li class="mt-8 ">
         <p-button label="Salir" icon="pi pi-power-off" iconPos="right" [styleClass]="'w-full'">
         </p-button>
@@ -47,6 +47,8 @@ export class MenuComponent implements OnInit {
           { label: 'Configuracion', icon: 'pi pi-fw pi-cog', routerLink: ['./configuracion'] },
           { label: 'PQR', icon: 'pi pi-fw pi-qrcode', routerLink: ['./pqr'] },
           { label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['./reportes'] },
+          { label: 'Redes Sociales', icon: 'pi pi-fw pi-share-alt', routerLink: ['./redes-sociales'] },
+
         ],
       }
     ];

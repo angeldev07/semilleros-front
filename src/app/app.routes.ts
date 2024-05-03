@@ -41,6 +41,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./pqr/pqr.routes').then(m => m.PQR_ROUTES)
             },
             {
+              path: 'redes-sociales',
+                 loadChildren: () => import('./redes-sociales/redes-sociales.routes').then(m => m.REDES_SOCIALES_ROUTES)
+            },
+            {
                 path:'',
                 pathMatch: 'full',
                 redirectTo: 'publicaciones'
