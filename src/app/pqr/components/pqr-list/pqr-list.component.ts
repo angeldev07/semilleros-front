@@ -5,16 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { MessagesModule } from 'primeng/messages';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Message } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-pqrs-list',
   standalone: true,
   imports: [
     CommonModule,
+    DialogModule,
     TableModule,
     ButtonModule,
     MessagesModule,
+    ConfirmDialogModule,
     FormsModule,
   ],
   template: `
@@ -67,17 +71,20 @@ import { Message } from 'primeng/api';
                     <td>{{ pqrsLista.apellido }}</td>
                     <td>{{ pqrsLista.cedula }}</td>
                     <td>
+                        <p-confirmDialog></p-confirmDialog>
                         <button
                             pButton
-                            icon="pi pi-question"
+                            icon="pi pi-pencil"
+                            label="Cambio Estado"
                             class="p-button-rounded p-button-info"
                             (click)="changeStatePQRS.emit({ id: pqrsLista.id, state: pqrsLista.estadoRadicado.estado })"
                         ></button>
                         <button
                             pButton
                             icon="pi pi-trash"
+                            label="Eliminar"
                             class="p-button-rounded p-button-danger"
-                            (click)="deletePQRS.emit(pqrsLista.id)"
+                            (click)="deletePQRS.emit({ id: pqrsLista.id, state: pqrsLista.estadoRadicado.estado })"
                         ></button>
                     </td>
                 </tr>
@@ -87,7 +94,6 @@ import { Message } from 'primeng/api';
         } @else {
           <p-messages [value]="messages" [enableService]="false" [closable]="false"></p-messages>
         }
-
 
   `,
     styles: `
@@ -102,10 +108,9 @@ import { Message } from 'primeng/api';
 })
 export class PqrsListComponent {
   @Input() pqrs: PQR[] = [];
-  @Output() deletePQRS = new EventEmitter<number>();
+  @Input() visible: boolean = false;
+  @Output() deletePQRS = new EventEmitter<{ id: number, state: string }>();
   @Output() changeStatePQRS = new EventEmitter<{ id: number, state: string }>();
-
-
 
   selectedPQRS!: any;
   messages: Message[] = [{ severity: 'info', summary: 'Lista vacia', detail: 'No hay pqrs por mostrar' }];

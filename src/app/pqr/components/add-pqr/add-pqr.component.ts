@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { ToastModule } from 'primeng/toast';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PQR } from '../../api/pqr';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { PqrsService } from '../../services/pqr.service';
 
 @Component({
   selector: 'app-add-pqrs',
@@ -31,33 +32,30 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     ToastModule,
   ],
   template: `
-    <p-dialog
-        header="Crear Radicado PQR"
-          [modal]="true"
-          [draggable]="false"
-          [resizable]="false"
-          [(visible)]="visible"
-          (onHide)="visibleChange.emit(false)"
-          [style]="{ width: '50rem' }"
-          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    >
+    <div class="w-10 mx-auto">
           <form
             [formGroup]="pqrsForm"
             (ngSubmit)="submitPqrs()"
           >
-          <div class="mb-3">
-                <label for="tipoPqrs" class="font-semibold block mb-2"
-                    >Tipo de Solicitud</label
-                >
-                @for(tipo of tiposPQRS; track tipo.key){
-                  <input class="m-2 border-round-sm" type="button" severity="secondary" pButton (click)="selectTipoPQRS(tipo.key)" [value]="tipo.name">
-                }
-                <!-- @if (validateInput('tipoPqrs')) {
-                <span class="text-red-500 text-md block p-2"
-                     >Escoge el tipo de solicitud</span
-                >
-                } -->
+          <div class="flex">
+            <div class="mb-3">
+                  <label for="tipoPqrs" class="font-semibold block mb-2"
+                      >Tipo de Solicitud</label
+                  >
+                  @for(tipo of tiposPQRS; track tipo.key){
+                    <input class="m-2 border-round-sm" type="button" severity="secondary" pButton (click)="selectTipoPQRS(tipo.key, tipo.desc)" [value]="tipo.name">
+                  }
+                  <!-- @if (validateInput('tipoPqrs')) {
+                  <span class="text-red-500 text-md block p-2"
+                      >Escoge el tipo de solicitud</span
+                  >
+                  } -->
             </div>
+            <div class="w-8 font-semibold block ml-5">
+              <span>Descripcion tipo solicitud:</span>
+              <p>{{pqrsDesc}}</p>
+            </div>
+          </div>
           <div class="mb-3">
                 <label for="title" class="font-semibold block mb-2"
                     >Título</label
@@ -179,12 +177,11 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
             </div>
               }
           </form>
-          <ng-template pTemplate="footer">
           <div class="card flex justify-content-center">
                 <p-button label="Enviar" icon="pi pi-check" (onClick)="submitPqrs()"></p-button>
             </div>
-          </ng-template>
-    </p-dialog>
+            <p-toast></p-toast>
+    </div>
   `,
       styles: `
       :host {
@@ -199,30 +196,36 @@ export class AddPqrsComponent implements OnInit{
   @Output() savePQRS = new EventEmitter<PQR>();
 
   showPersonalInfo : boolean = true;
+  pqrsDesc = "";
   pqrsTypes: number = 0;
   anonimous = [ { key: 'true', name: 'Si' }, { key: 'false', name: 'No' } ];
   tiposPQRS = [
     {
       key: 1,
       name: 'Petición',
+      desc: 'PETICION: Es el derecho fundamental que tiene toda persona natural o jurídica a presentar solicitudes de interés general o particular. Las peticiones podrán ser presentadas de manera escrita o verbal a través de los diferentes canales de atención o de gestión dispuestos por la entidad'
     },
     {
       key: 2,
       name: 'Queja',
+      desc: 'QUEJA: Es la manifestación verbal o escrita de insatisfacción, molestia o disgusto hecha por una persona natural o jurídica respecto a la conducta o actuar de un servidor de la entidad o de los particulares que cumplan una función en el servicio.'
     },
     {
       key: 3,
       name: 'Reclamo',
+      desc: 'RECLAMO: Manifestación verbal o escrita de insatisfacción, molestia o disgusto hecha por una persona natural o jurídica en la prestación de alguno de los servicios y/o productos ofrecidos por la Entidad.'
     },
     {
       key: 4,
       name: 'Sugerencia',
+      desc: 'SUGERENCIA: Manifestación verbal o escrita de una idea o propuesta para mejorar los productos o servicios ofrecidos por la entidad'
     }
   ]
   pqrs : PQR | undefined = undefined;
 
-  selectTipoPQRS(tipoKey: number) {
+  selectTipoPQRS(tipoKey: number, tipoDesc: string) {
     this.pqrsTypes = tipoKey;
+    this.pqrsDesc = tipoDesc;
     console.log(this.pqrsTypes);
   }
 
@@ -239,9 +242,15 @@ export class AddPqrsComponent implements OnInit{
 });
 
 
-constructor(private fb: FormBuilder) {}
+constructor(
+  private fb: FormBuilder,
+  private pqrsService: PqrsService,
+  private message: MessageService,
+  private confirmationService: ConfirmationService) {}
+
 
 ngOnInit(): void {
+    this.pqrsDesc = 'ATENCION!!! Selecciona un tipo de solicitud para continuar'
     this.showPersonalInfo = false;
     if(!!this.pqrs) {
         this.pqrsForm.patchValue({
@@ -291,7 +300,7 @@ public submitPqrs() {
       titulo: this.pqrsForm.get('title')?.value ?? '',
       descripcion: this.pqrsForm.get('desc')?.value ?? '',
       correo: this.pqrsForm.get('email')?.value ?? '',
-      anonimo: Boolean(this.pqrsForm.get('anonimo')?.value),
+      anonimo: this.pqrsForm.get('anonimo')?.value ?? false,
       nombre: this.pqrsForm.get('nombre')?.value ?? '',
       apellido: this.pqrsForm.get('apellido')?.value ?? '',
       cedula: this.pqrsForm.get('dni')?.value ?? '',
@@ -299,8 +308,18 @@ public submitPqrs() {
     };
 
     console.log(pqrs);
-    this.savePQRS.emit(pqrs);
-    this.visibleChange.emit(false)
+    this.pqrsService.savePqrs(pqrs).subscribe({
+      next: (res: any) => {
+        this.pqrsForm.reset();
+        this.message.clear();
+        this.message.add({ severity: 'success', summary: 'Agregado', detail: 'Se ha enviado el PQRS con exito, se le dará respuesta pronto vía email.' });
+      },
+      error: (err: any) => {
+        this.message.clear();
+        this.message.add({ severity: 'error', summary: 'Error :(', detail: 'Ha ocurrido un error inesperado. Intentelo de nuevo' });
+        console.log(err);
+      }
+    })
 }
 
 }
