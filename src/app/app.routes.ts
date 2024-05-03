@@ -41,6 +41,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./pqr/pqr.routes').then(m => m.PQR_ROUTES)
             },
             {
+                path: 'semilleros',
+                loadChildren: () => import('./semilleros/semilleros.routes').then(m => m.SEMILLEROS_ROUTES)
+            },
+            {
                 path:'',
                 pathMatch: 'full',
                 redirectTo: 'publicaciones'
