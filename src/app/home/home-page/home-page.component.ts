@@ -171,6 +171,10 @@ export class HomePageComponent implements OnInit {
       label: 'PQR',
       routerLink: ['']
     },
+    {
+      label: 'Normatividad',
+      routerLink: ['']
+    },
   ]
 
   recentPost = signal<any>({

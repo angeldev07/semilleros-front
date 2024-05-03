@@ -13,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
       </ul>
     </div>
   `,
-  styleUrls: ['./normatividad-list.component.css']
+  //styleUrls: ['./normatividad-list.component.css']
 })
 export class NormatividadListComponent implements OnInit {
   normatividades = [];

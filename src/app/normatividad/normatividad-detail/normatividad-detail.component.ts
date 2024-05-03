@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
       <p>{{ normatividad.description }}</p>
     </div>
   `,
-  styleUrls: ['./normatividad-detail.component.css']
+  //styleUrls: ['./normatividad-detail.component.css']
 })
 export class NormatividadDetailComponent implements OnInit {
   normatividad: any = {};

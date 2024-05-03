@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+
 @Component({
   selector: 'app-normatividad-add-edit',
   templateUrl: './normatividad-add-edit.component.html',
   styleUrls: ['./normatividad-add-edit.component.css']
 })
 export class NormatividadAddEditComponent implements OnInit {
-  normatividadForm: FormGroup;
+  normatividadForm: FormGroup | undefined;
   isEdit: boolean = false;  // Default is add mode
 
   constructor(

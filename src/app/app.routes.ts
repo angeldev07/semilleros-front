@@ -41,6 +41,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./pqr/pqr.routes').then(m => m.PQR_ROUTES)
             },
             {
+                path: 'normatividad',
+                loadChildren: () => import('./normatividad/normatividad-routing.module').then(m => m.NormatividadRoutingModule)
+            },
+            {
                 path:'',
                 pathMatch: 'full',
                 redirectTo: 'publicaciones'
