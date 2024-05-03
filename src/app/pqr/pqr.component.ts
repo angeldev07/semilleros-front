@@ -3,57 +3,50 @@ import { PqrsListComponent } from './components/pqr-list/pqr-list.component';
 import { AddPqrsComponent } from './components/add-pqr/add-pqr.component';
 import { PQR } from './api/pqr';
 import { PqrsService } from './services/pqr.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-pqr',
   standalone: true,
   imports: [
     ButtonModule,
+    ToastModule,
     PqrsListComponent,
     AddPqrsComponent
   ],
   template: `
-          <section
-        class="card flex justify-content-between align-items-center px-4"
-        >
-        <h2 class="mb-0 text-2xl md:text-3xl">Radicados PQR</h2>
-                <p-button
-                    label="Agregar"
-                    icon="pi pi-plus"
-                    [iconPos]="'right'"
-                    [outlined]="true"
-                    (onClick)="openAddPQRDialog = true"
-                ></p-button>
+      <main>
+        <section
+            class="card flex justify-content-between align-items-center px-4"
+            >
+              <h2 class="mb-0 text-2xl md:text-3xl">Radicados PQR</h2>
         </section>
         <section>
-        <app-pqrs-list
-            [pqrs]="pqrsLista"
-            (deletePQRS)="deletePQRS($event)"
-            (changeStatePQRS)="changeStatePQRS($event.id, $event.state)"
-        ></app-pqrs-list>
+          <app-pqrs-list
+              [pqrs]="pqrsLista"
+              (deletePQRS)="deletePQRS($event.id, $event.state)"
+              (changeStatePQRS)="changeStatePQRS($event.id, $event.state)"
+          ></app-pqrs-list>
         </section>
-        @if (openAddPQRDialog) {
-          <app-add-pqrs
-            (savePQRS)="savePQRS($event)"
-            [(visible)]="openAddPQRDialog"
-          ></app-add-pqrs>
-            }
+          <p-toast></p-toast>
+      </main>
   `,
   styles: ``,
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PqrComponent implements OnInit{
-  openAddPQRDialog = false;
   nextState = '';
+  stateMayus = '';
   pqrsList = signal<PQR[]>([]);
   selectedPQRS = signal<PQR | null | number[]>(null);
 
   constructor(
     private pqrsService: PqrsService,
-    private message: MessageService
+    private message: MessageService,
+    private confirmationService: ConfirmationService
   ) {
   }
 
@@ -104,32 +97,57 @@ export class PqrComponent implements OnInit{
   }
 
 
-  deletePQRS(id: number) {
-    this.pqrsService.deletePqrs(id).subscribe({
-        next: () => {
-            this.getPQRSList();
-            this.message.clear();
-            this.message.add({ severity: 'success', summary: 'Eliminado', detail: 'Se ha eliminado el radicado con éxito' });
-        },
-        error: (err) => {
-            this.message.clear();
-            this.message.add({ severity: 'error', summary: 'Error :(', detail: 'Ha ocurrido un error inesperado. Intentelo de nuevo' });
-            console.log(err);
-        },
-    });
+  deletePQRS(id: number, state: string) {
+    if(state != 'RESUELTO'){
+      this.message.add({ severity: 'error', summary: 'Error :(', detail: 'El radicado no se encuentra resuelto, por ende no se puede eliminar' });
+      return;
+    }
+      this.confirmationService.confirm({
+          message: 'Desea borrar esta solicitud PQRS?',
+          header: 'Delete Confirmation',
+          icon: 'pi pi-info-circle',
+          acceptButtonStyleClass:"p-button-danger p-button-text",
+          rejectButtonStyleClass:"p-button-text p-button-text",
+          acceptIcon:"none",
+          rejectIcon:"none",
+          accept: () => {
+              this.pqrsService.deletePqrs(id).subscribe({
+                next: () => {
+                    this.getPQRSList();
+                    this.message.clear();
+                    this.message.add({ severity: 'success', summary: 'Eliminado', detail: 'Se ha eliminado la solicitud con éxito' });
+                },
+                error: (err) => {
+                    this.message.clear();
+                    this.message.add({ severity: 'error', summary: 'Error :(', detail: 'Ha ocurrido un error inesperado. Intentelo de nuevo' });
+                    console.log(err);
+                },
+              });
+          },
+          reject: () => {
+              this.message.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+          }
+      });
+
 }
 
 changeStatePQRS(id: number, state: string){
+  if(state === 'RESUELTO'){
+    this.message.add({ severity: 'error', summary: 'Error :(', detail: 'El radicado ya se encuentra resuelto' });
+    return;
+  }
   if(state === 'PENDIENTE'){
     this.nextState = 'revision';
+    this.stateMayus = 'REVISION';
   }else{
     this.nextState = 'resuelto';
+    this.stateMayus = 'RESUELTO';
   }
   this.pqrsService.changeStatePqrs(id, this.nextState).subscribe({
     next: () => {
       this.getPQRSList();
       this.message.clear();
-      this.message.add({ severity: 'success', summary: 'Actualizado', detail: 'Se ha actualizado el estado del radicado con éxito' });
+      this.message.add({ severity: 'success', summary: 'Actualizado', detail: 'Se ha actualizado el estado de '+state+' a '+this.stateMayus+' con éxito'});
     },
     error: (err) => {
       this.message.clear();
@@ -137,6 +155,7 @@ changeStatePQRS(id: number, state: string){
       console.log(err);
     }
   })
+
 }
 
 
