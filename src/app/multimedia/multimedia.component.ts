@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { AddAlbumComponent } from './components/add-album/add-album.component';
+import { AlbumListComponent } from './components/album-list/album-list.component';
 import { Album } from './api/multimedia';
 import { MultimediaService } from './services/multimedia.service';
 
@@ -13,11 +14,11 @@ import { MultimediaService } from './services/multimedia.service';
     CommonModule,
     ButtonModule,
     AddAlbumComponent,
-    //AlbumListComponent,
+    AlbumListComponent,
   ],
   template: `
     <section class="card flex justify-content-between align-items-center px-4">
-      <h2 class="mb-0 text-2xl md:text-3xl">Álbumes</h2>
+      <h2 class="mb-0 text-2xl md:text-3xl">Albums</h2>
       <p-button
         label="Agregar"
         icon="pi pi-plus"
@@ -26,7 +27,7 @@ import { MultimediaService } from './services/multimedia.service';
         (onClick)="openAddAlbumDialog = true"
       ></p-button>
     </section>
-   
+    <app-album-list [albums]="albumList" (deleteAlbum)="deleteAlbum($event)"></app-album-list>
     <app-add-album
       (saveAlbum)="saveAlbum($event)"
       [(visible)]="openAddAlbumDialog"
@@ -42,7 +43,8 @@ export class MultimediaComponent implements OnInit {
 
   constructor(
     private multimediaService: MultimediaService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cd:ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -51,12 +53,15 @@ export class MultimediaComponent implements OnInit {
 
   getAlbums() {
     this.multimediaService.getAlbums().subscribe(
-      (albums: Album[]) => {
+      {next: (albums: Album[]) => {
         this.albumList = albums;
+        this.cd.markForCheck();
       },
-      (error: any) => {
+      
+      error: (error: any) => {
         console.error('Error al obtener los álbumes:', error);
       }
+    }
     );
   }
 
