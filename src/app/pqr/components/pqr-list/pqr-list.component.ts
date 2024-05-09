@@ -39,7 +39,7 @@ import { DialogModule } from 'primeng/dialog';
                 <tr>
                     <th pSortableColumn="id" style="width: 3rem">ID <p-sortIcon field="id" /></th>
                     <th pSortableColumn="title">Título <p-sortIcon field="title" /></th>
-                    <th pSortableColumn="desc" style="width: 200px;">Descripción <p-sortIcon field="desc" /></th>
+                    <!-- <th pSortableColumn="desc" style="width: 200px;">Descripción <p-sortIcon field="desc" /></th> -->
                     <th pSortableColumn="dateRad">Fecha Radicado <p-sortIcon field="dateRad" /></th>
                     <th pSortableColumn="stateRad">Estado <p-sortIcon field="stateRad" /></th>
                     <th pSortableColumn="email">Correo <p-sortIcon field="email" /></th>
@@ -58,9 +58,9 @@ import { DialogModule } from 'primeng/dialog';
                     <td>{{ pqrsLista.id }}</td>
                     <td>{{ pqrsLista.titulo }}</td>
                     <!-- <td>{{ pqrsLista.descripcion }}</td> -->
-                    <td style="max-width: 200px; word-wrap: break-word;">
+                    <!-- <td style="max-width: 200px; word-wrap: break-word;">
                 {{pqrsLista.descripcion}}
-            </td>
+            </td> -->
                     <td>{{ pqrsLista.fechaRadicado | date }}</td>
                     <td>{{ pqrsLista.estadoRadicado.estado }}</td>
                     <td>{{ pqrsLista.correo }}</td>

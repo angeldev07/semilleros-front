@@ -16,11 +16,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           </div>
           <div class="form-group">
             <label for="nombre">Nombre del Semillero:</label>
-            <input type="text" id="nombre" #nombre required class="form-control">
+            <input type="text" id="nombre" #nombre required class="form-control" [value]="informacion.nombre">
           </div>
           <div class="form-group">
             <label for="sigla">Sigla del Semillero:</label>
-            <input type="text" id="sigla" #sigla required class="form-control">
+            <input type="text" id="sigla" #sigla required class="form-control" [value]="informacion.sigla">
           </div>
         </div>
 
@@ -28,15 +28,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           <div class="section-title">Descripción</div>
           <div class="form-group">
             <label for="mision">Misión:</label>
-            <textarea id="mision" #mision required class="form-control"></textarea>
+            <textarea id="mision" #mision required class="form-control" [value]="informacion.mision"></textarea>
           </div>
           <div class="form-group">
             <label for="vision">Visión:</label>
-            <textarea id="vision" #vision required class="form-control"></textarea>
+            <textarea id="vision" #vision required class="form-control" [value]="informacion.vision"></textarea>
           </div>
           <div class="form-group">
             <label for="palabrasClave">Palabras Clave:</label>
-            <input type="text" id="palabrasClave" #palabrasClave required class="form-control">
+            <input type="text" id="palabrasClave" #palabrasClave required class="form-control" [value]="informacion.palabrasClave">
           </div>
         </div>
 
@@ -44,23 +44,23 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           <div class="section-title">Contacto</div>
           <div class="form-group">
             <label for="director">Director del Semillero:</label>
-            <input type="text" id="director" #director required class="form-control">
+            <input type="text" id="director" #director required class="form-control" [value]="informacion.director">
           </div>
           <div class="form-group">
             <label for="whatsapp">Whatsapp:</label>
-            <input type="text" id="whatsapp" #whatsapp required class="form-control">
+            <input type="text" id="whatsapp" #whatsapp required class="form-control" [value]="informacion.whatsapp">
           </div>
           <div class="form-group">
             <label for="instagram">Instagram:</label>
-            <input type="text" id="instagram" #instagram required class="form-control">
+            <input type="text" id="instagram" #instagram required class="form-control" [value]="informacion.instagram">
           </div>
           <div class="form-group">
             <label for="facebook">Facebook:</label>
-            <input type="text" id="facebook" #facebook required class="form-control">
+            <input type="text" id="facebook" #facebook required class="form-control" [value]="informacion.facebook">
           </div>
           <div class="form-group">
             <label for="correo">Correo Electrónico:</label>
-            <input type="email" id="correo" #correo required class="form-control">
+            <input type="email" id="correo" #correo required class="form-control" [value]="informacion.correo">
           </div>
         </div>
 
@@ -106,6 +106,17 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfiguracionComponent {
+
+  informacion : any = {}
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.informacion = JSON.parse(localStorage.getItem('semillero') || '{}');
+
+  }
+
+
   guardarRegistro(): void {
     const nombre = (document.getElementById('nombre') as HTMLInputElement).value;
     const sigla = (document.getElementById('sigla') as HTMLInputElement).value;
@@ -119,6 +130,7 @@ export class ConfiguracionComponent {
     const correo = (document.getElementById('correo') as HTMLInputElement).value;
 
     console.log('Registro guardado:', { nombre, sigla, mision, vision, palabrasClave, director, whatsapp, instagram, facebook, correo });
+    localStorage.setItem('semillero', JSON.stringify({ nombre, sigla, mision, vision, palabrasClave, director, whatsapp, instagram, facebook, correo }));
   }
 
   onFileSelected(event: any): void {
