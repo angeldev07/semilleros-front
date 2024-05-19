@@ -1,55 +1,77 @@
-<header class="w-full m-0 p-0 mb-6">
-    <section class="px-4 pt-2">
-        <ul class="list-none flex gap-4 justify-content-end">
-        <li class="cursor-pointer">
-            <i class="pi pi-facebook text-2xl text-blue-500"></i>
-        </li>
-        <li class="cursor-pointer">
-            <i class="pi pi-twitter text-2xl text-blue-300"></i>
-        </li>
-        <li class="cursor-pointer">
-            <i class="pi pi-instagram text-2xl text-red-300"></i>
-        </li>
-        <li class="cursor-pointer">
-            <i class="pi pi-youtube text-2xl text-red-500"></i>
-        </li>
-        </ul>
-    </section>
+<header class="header bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand logo" [routerLink]="['/']">Inicio</a>
 
-    <nav
-        class="bg-black-alpha-70 flex justify-content-between align-items-center px-4"
-    >
-        <a
-        [routerLink]="['/']"
-        class="inline-block  text-white underline py-3 px-4 inicio"
-        >
-        Inicio
-        </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <ul class=" flex align-items-center list-none p-0 m-0 gap-3">
-        @for (option of options; track $index) {
-        <li>
-            <a
-            [routerLink]="option.routerLink"
-            class="inline-block text-black py-3 px-4 text-white hover:underline transition-all transition-duration-100"
-            >
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li *ngFor="let option of options" class="nav-item dropdown" [class.dropdown]="option.children">
+          <a class="nav-link" [routerLink]="option.routerLink" [class.dropdown-toggle]="option.children"
+            id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{ option.label }}
-            </a>
+          </a>
+          <ul *ngIf="option.children" class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li *ngFor="let child of option.children">
+              <a [routerLink]="child.routerLink" class="dropdown-item">
+                {{ child.label }}
+              </a>
+            </li>
+          </ul>
         </li>
-        }
-        </ul>
+      </ul>
 
-        <div>
-        <a
-            [routerLink]="['/admin']"
-            class="inline-block  text-white py-3 px-4 inicio hover:bg-red-600 transition-all transition-duration-100"
-        >
-            Iniciar sesion
-            <i class="pi pi-sign-in"></i>
+      <div>
+        <a [routerLink]="['/admin']" class="btn btn-outline-light login">
+          Iniciar sesión
+          <i class="pi pi-sign-in"></i>
         </a>
-        </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </header>
+<div class="bg-dark ">
+<div id="carouselExampleCaptions" class="carousel slide ml-5 mr-5 " data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner rounded-2">
+    <div class="carousel-item active">
+      <img src="../../assets/shared/imagen1-Carrucel.jpeg" style="height:43em;width: 69%;" class="d-block w-100" alt="First slide">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>First slide label</h5>
+        <p>Some representative placeholder content for the first slide.</p>
+      </div>
+    </div>
+    <div class="carousel-item rounded-2">
+      <img src="../../assets/shared/imagen2-carrucel.avif"style="height:43em;width: 69%;" class="d-block w-100" alt="Second slide">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Second slide label</h5>
+        <p>Some representative placeholder content for the second slide.</p>
+      </div>
+    </div>
+    <div class="carousel-item rounded-2">
+      <img src="../../assets/shared/imagen3-carrucel.jpg"style="height:43em;width: 69%;" class="d-block w-100" alt="Third slide">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Third slide label</h5>
+        <p>Some representative placeholder content for the third slide.</p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+</div>
 
-
-<router-outlet/>
+  <router-outlet></router-outlet>

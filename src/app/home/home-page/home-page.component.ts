@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal, type OnInit } from '@angular/core';
-import { PostHomeService } from '../service/post-home.service';
 import { Router, RouterLink } from '@angular/router';
+import { PostHomeService } from '../service/post-home.service';
 
 @Component({
   selector: 'app-home-page',
@@ -9,7 +9,23 @@ import { Router, RouterLink } from '@angular/router';
   imports: [CommonModule, RouterLink],
   template: `
       <!-- redes sociales -->
-
+    <div class=""> 
+      <section class="d-flex justify-content-center align-items-center px-4 pt-2">
+        <ul class="list-none flex gap-4 ">
+        <li class="cursor-pointer">
+            <i class="pi pi-facebook text-2xl text-blue-500"></i>
+        </li>
+        <li class="cursor-pointer">
+            <i class="pi pi-twitter text-2xl text-blue-300"></i>
+        </li>
+        <li class="cursor-pointer">
+            <i class="pi pi-instagram text-2xl text-red-300"></i>
+        </li>
+        <li class="cursor-pointer">
+            <i class="pi pi-youtube text-2xl text-red-500"></i>
+        </li>
+        </ul>
+    </section>
     <main class="w-full ">
       <section class="post-header ">
         @if (!recentPost().loading) {
@@ -111,7 +127,9 @@ import { Router, RouterLink } from '@angular/router';
         </div>
         }
       </section>
-    </main>`,
+    </main>
+    </div>
+    `,
   styles: `
 
 

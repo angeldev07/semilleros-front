@@ -1,13 +1,48 @@
+body{
+  background-color: dark;
+}
 .header {
   width: 100%;
-  max-width: 1400px;
-  margin: auto;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 0.8rem;
+}
+.logo{
+  margin-left:10em;
+}
+.login{
+  margin-right: 10em;
+}
+.navbar-nav .nav-item .dropdown-menu {
+  background-color: black;
 }
 
-.p-bg {
-  background-color: #393939 !important;
+.navbar-nav .nav-item .dropdown-item {
+  color: white;
+  font-family: 'Söhne', sans-serif;
+  font-size: 14px;
+  line-height: 19px;
+}
+#carouselExampleCaptions{
+  margin-bottom: 50px;
+ 
 }
 
-.inicio {
-  background-color: #f65050 !important;
+.navbar-nav .nav-item .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-outline-light {
+  color: white;
+  border-color: white;
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-item {
+    margin-left: 10px;
+  
+  }
 }
