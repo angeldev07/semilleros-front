@@ -9,8 +9,8 @@ import { PostHomeService } from '../service/post-home.service';
   imports: [CommonModule, RouterLink],
   template: `
       <!-- redes sociales -->
-    <div class=""> 
-      <section class="d-flex justify-content-center align-items-center px-4 pt-2">
+    <div id ="sec">
+      <section  class="d-flex justify-content-center align-items-center px-4 mt-0 pt-4 ">
         <ul class="list-none flex gap-4 ">
         <li class="cursor-pointer">
             <i class="pi pi-facebook text-2xl text-blue-500"></i>
@@ -26,6 +26,7 @@ import { PostHomeService } from '../service/post-home.service';
         </li>
         </ul>
     </section>
+</div>
     <main class="w-full ">
       <section class="post-header ">
         @if (!recentPost().loading) {
@@ -128,7 +129,7 @@ import { PostHomeService } from '../service/post-home.service';
         }
       </section>
     </main>
-    </div>
+    
     `,
   styles: `
 
@@ -163,7 +164,9 @@ import { PostHomeService } from '../service/post-home.service';
       background-color: #f5f5dc34;
       color: #fff;
   }
-
+#sec{
+background-color: rgb(2,2,2);
+}
     `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
