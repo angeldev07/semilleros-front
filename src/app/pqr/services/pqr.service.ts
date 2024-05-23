@@ -14,6 +14,11 @@ export class PqrsService {
     return this.http.get(`${environment.api}/pqrs`);
   }
 
+  getPQRSById(id: number) {
+    const params = { pqrsId: id }
+    return this.http.get<PQR>(`${environment.api}/pqrs/`, { params });
+  }
+
   savePqrs(pqrs: PQR) {
     const url = `${environment.api}/pqrs/create`;
     const params = { tipoPQRSID: pqrs.tipoPqrs };

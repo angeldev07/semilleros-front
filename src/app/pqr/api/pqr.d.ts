@@ -1,4 +1,5 @@
 export interface PQR {
+  id: number;
   titulo: string,
   descripcion: string,
   correo: string,

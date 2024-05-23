@@ -8,6 +8,7 @@ import { MessagesModule } from 'primeng/messages';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Message } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+import { PqrsService } from '../../services/pqr.service';
 
 @Component({
   selector: 'app-pqrs-list',
@@ -35,8 +36,15 @@ import { DialogModule } from 'primeng/dialog';
             [globalFilterFields]="['name']"
             dataKey="id"
         >
+            <ng-template pTemplate="caption">
+                <div class="flex flex-wrap justify-content-end gap-2">
+                    <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
+                    <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
+                    <th style="width: 5rem"></th>
                     <th pSortableColumn="id" style="width: 3rem">ID <p-sortIcon field="id" /></th>
                     <th pSortableColumn="title">Título <p-sortIcon field="title" /></th>
                     <!-- <th pSortableColumn="desc" style="width: 200px;">Descripción <p-sortIcon field="desc" /></th> -->
@@ -55,6 +63,18 @@ import { DialogModule } from 'primeng/dialog';
             <ng-template pTemplate="body" let-pqrsLista let-expanded="expanded">
                 @if (pqrs.length > 0) {
                 <tr>
+                    <td>
+                        <p-button
+                        type="button"
+                        pRipple
+                        [pRowToggler]="pqrsLista"
+                        [text]="true"
+                        [rounded]="true"
+                        [plain]="true"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                        (onClick) = "getPqrsById(pqrsLista.id)"
+                        />
+                    </td>
                     <td>{{ pqrsLista.id }}</td>
                     <td>{{ pqrsLista.titulo }}</td>
                     <!-- <td>{{ pqrsLista.descripcion }}</td> -->
@@ -90,6 +110,16 @@ import { DialogModule } from 'primeng/dialog';
                 </tr>
                 }
             </ng-template>
+            <ng-template pTemplate="rowexpansion">
+            <tr>
+                <td colspan="7">
+                    <div class="p-3">
+                        <h2>Descripción de esta solicitud</h2>
+                        <p>{{pqrs[idPqr].descripcion}}</p>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
         </p-table>
         } @else {
           <p-messages [value]="messages" [enableService]="false" [closable]="false"></p-messages>
@@ -111,6 +141,40 @@ export class PqrsListComponent {
   @Input() visible: boolean = false;
   @Output() deletePQRS = new EventEmitter<{ id: number, state: string }>();
   @Output() changeStatePQRS = new EventEmitter<{ id: number, state: string }>();
+  expandedRows = {};
+  pqrsD: PQR | undefined;
+  idPqr: number = 0;
+
+  constructor(
+    private pqrsService: PqrsService
+  ) { }
+
+  expandAll() {
+    this.expandedRows = this.pqrs.reduce((acc: { [key: number]: boolean }, p: { id: number }) => {
+      acc[p.id] = true;
+      return acc;
+    }, {});
+  }
+
+  collapseAll() {
+    this.expandedRows = {};
+  }
+
+  getPqrsById(id: number) {
+    this.idPqr = id-1;
+    console.log(id);
+    this.pqrsService.getPQRSById(id).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.pqrsD = res;
+        console.log(this.pqrsD);
+        console.log(this.pqrsD?.descripcion);
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
+  }
 
   selectedPQRS!: any;
   messages: Message[] = [{ severity: 'info', summary: 'Lista vacia', detail: 'No hay pqrs por mostrar' }];

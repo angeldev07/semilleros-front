@@ -62,6 +62,7 @@ export class PqrComponent implements OnInit{
     this.pqrsService.getPqrs().subscribe({
       next: (res: any) => {
         this.pqrsList.set(res);
+        console.log(res)
       },
       error: (err: any) => {
         console.log(err)
@@ -80,6 +81,7 @@ export class PqrComponent implements OnInit{
       titulo: pqrs.titulo,
       descripcion: pqrs.descripcion,
       tipoPqrs: pqrs.tipoPqrs,
+      id: pqrs.id
     };
     console.log(data);
     this.pqrsService.savePqrs(data).subscribe({

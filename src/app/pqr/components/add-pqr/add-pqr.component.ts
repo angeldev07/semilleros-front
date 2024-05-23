@@ -305,6 +305,7 @@ public submitPqrs() {
       apellido: this.pqrsForm.get('apellido')?.value ?? '',
       cedula: this.pqrsForm.get('dni')?.value ?? '',
       tipoPqrs: this.pqrsTypes,
+      id: this.pqrs?.id ?? 0  
     };
 
     console.log(pqrs);
