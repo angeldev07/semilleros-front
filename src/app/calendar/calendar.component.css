@@ -1,28 +1,29 @@
-/* Puedes personalizar estos estilos según tus necesidades */
 .full-calendar {
-    max-width: 900px;
-    margin: 40px auto;
-  }
-  
-  .fc-toolbar {
-    background-color: #fff;
-  }
-  
-  .fc-event {
-    background-color: #2196f3;
-    border: none;
-    color: #fff;
-  }
-  
-  .fc-daygrid-event {
-    background-color: #ff4081;
-  }
-  
-  .fc-daygrid-event-dot {
-    border-color: #ff4081;
-  }
-  
-  .fc-day-today {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-  
+  max-width: 75%; /* Adjust this value based on your design preference */
+  margin: 30px auto; /* This centers the calendar horizontally */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: adds subtle shadow for depth */
+  color-background: rgb(2,2,2);
+}
+
+.fc-toolbar {
+  background-color:   rgb(2,2,2);
+  padding: 10px 0; /* Adds some padding around the toolbar text */
+}
+
+.fc-event, .fc-daygrid-event-dot {
+  background-color: #2196f3;
+  border: none;
+  color: #fff;
+}
+
+.fc-daygrid-event {
+  background-color: #ff4081;
+}
+
+.fc-daygrid-event-dot {
+  border-color: #ff4081;
+}
+
+.fc-day-today {
+  background-color: rgba(0, 0, 0, 0.05);
+}

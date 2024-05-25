@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal, type OnInit } from '@angular/core';
-import { PostHomeService } from '../service/post-home.service';
 import { ActivatedRoute } from '@angular/router';
+import { PostHomeService } from '../service/post-home.service';
 
 @Component({
   selector: 'app-post-view',
@@ -11,7 +11,8 @@ import { ActivatedRoute } from '@angular/router';
   ],
   template: `
   @if (post()) {
-    <main class="cont">
+    <div class="container">
+    <main class="cont ">
 
       <div class="grid">
         
@@ -49,6 +50,8 @@ import { ActivatedRoute } from '@angular/router';
       </div>
     
     </main>
+
+    </div>
   }@else {
     <h1>Cargando informacion...</h1>
   }
@@ -59,6 +62,7 @@ import { ActivatedRoute } from '@angular/router';
     width: 100%;
     max-width: 1200px;
     margin: auto;
+    color-background: rgb(2,2,2);
   }
   .img {
     object-fit: cover;
