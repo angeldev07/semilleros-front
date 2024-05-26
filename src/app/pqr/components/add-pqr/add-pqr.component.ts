@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PQR } from '../../api/pqr';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import {InputNumberModule} from 'primeng/inputnumber'
 import { PqrsService } from '../../services/pqr.service';
 
 @Component({
@@ -24,6 +25,7 @@ import { PqrsService } from '../../services/pqr.service';
     ButtonModule,
     RadioButtonModule,
     ReactiveFormsModule,
+    InputNumberModule,
     InputTextareaModule,
     TabViewModule,
     TableModule,
@@ -164,7 +166,7 @@ import { PqrsService } from '../../services/pqr.service';
                 >
                 <input
                     id="dni"
-                    type="text"
+                    type="number"
                     formControlName="dni"
                     pInputText
                     class="w-full"
@@ -296,7 +298,7 @@ public submitPqrs() {
     //     return;
     // }
 
-    const pqrs: PQR = {
+    const pqrs: any = {
       titulo: this.pqrsForm.get('title')?.value ?? '',
       descripcion: this.pqrsForm.get('desc')?.value ?? '',
       correo: this.pqrsForm.get('email')?.value ?? '',
@@ -304,14 +306,13 @@ public submitPqrs() {
       nombre: this.pqrsForm.get('nombre')?.value ?? '',
       apellido: this.pqrsForm.get('apellido')?.value ?? '',
       cedula: this.pqrsForm.get('dni')?.value ?? '',
-      tipoPqrs: this.pqrsTypes,
-      id: this.pqrs?.id ?? 0  
+      id: this.pqrs?.id ?? 0
     };
 
     console.log(pqrs);
-    this.pqrsService.savePqrs(pqrs).subscribe({
+    this.pqrsService.savePqrs(pqrs, this.pqrsTypes).subscribe({
       next: (res: any) => {
-        this.pqrsForm.reset();
+        // this.pqrsForm.reset();
         this.message.clear();
         this.message.add({ severity: 'success', summary: 'Agregado', detail: 'Se ha enviado el PQRS con exito, se le dará respuesta pronto vía email.' });
       },

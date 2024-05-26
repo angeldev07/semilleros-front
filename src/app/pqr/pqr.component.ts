@@ -3,6 +3,7 @@ import { PqrsListComponent } from './components/pqr-list/pqr-list.component';
 import { AddPqrsComponent } from './components/add-pqr/add-pqr.component';
 import { PQR } from './api/pqr';
 import { PqrsService } from './services/pqr.service';
+import { TabViewModule } from 'primeng/tabview';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -13,6 +14,7 @@ import { ToastModule } from 'primeng/toast';
   imports: [
     ButtonModule,
     ToastModule,
+    TabViewModule,
     PqrsListComponent,
     AddPqrsComponent
   ],
@@ -24,11 +26,37 @@ import { ToastModule } from 'primeng/toast';
               <h2 class="mb-0 text-2xl md:text-3xl">Radicados PQR</h2>
         </section>
         <section>
+
+        <p-tabView>
+                    <p-tabPanel header="Listado">
+                      <app-pqrs-list
+                        [pqrs]="pqrsLista"
+                        (deletePQRS)="deletePQRS($event.id, $event.state)"
+                        (changeStatePQRS)="changeStatePQRS($event.id, $event.state)"
+                       ></app-pqrs-list>
+                    </p-tabPanel>
+                    <p-tabPanel header="Pendientes">
+                        <ng-template pTemplate="content">
+                            <app-pqrs-list [pqrs]="pqrPendiente" />
+                        </ng-template>
+                    </p-tabPanel>
+                    <p-tabPanel header="Revision">
+                        <ng-template pTemplate="content">
+                            <app-pqrs-list [pqrs]="pqrRevision" />
+                        </ng-template>
+                    </p-tabPanel>
+                    <p-tabPanel header="Resuelto">
+                        <ng-template pTemplate="content">
+                            <app-pqrs-list [pqrs]="pqrResuelto" />
+                        </ng-template>
+                    </p-tabPanel>
+                </p-tabView>
+<!--
           <app-pqrs-list
               [pqrs]="pqrsLista"
               (deletePQRS)="deletePQRS($event.id, $event.state)"
               (changeStatePQRS)="changeStatePQRS($event.id, $event.state)"
-          ></app-pqrs-list>
+          ></app-pqrs-list> -->
         </section>
           <p-toast></p-toast>
       </main>
@@ -52,6 +80,18 @@ export class PqrComponent implements OnInit{
 
   ngOnInit(): void {
     this.getPQRSList();
+  }
+
+  get pqrPendiente() {
+    return this.pqrsList().filter((pqr) => pqr.estadoRadicado && pqr.estadoRadicado.estado === 'PENDIENTE');
+  }
+
+  get pqrRevision() {
+    return this.pqrsList().filter((pqr) => pqr.estadoRadicado && pqr.estadoRadicado.estado === 'REVISION');
+  }
+
+  get pqrResuelto() {
+    return this.pqrsList().filter((pqr) => pqr.estadoRadicado && pqr.estadoRadicado.estado === 'RESUELTO');
   }
 
   get pqrsLista(){
@@ -79,12 +119,13 @@ export class PqrComponent implements OnInit{
       correo: pqrs.correo,
       anonimo: pqrs.anonimo,
       titulo: pqrs.titulo,
+      estado: pqrs.estadoRadicado,
       descripcion: pqrs.descripcion,
       tipoPqrs: pqrs.tipoPqrs,
       id: pqrs.id
     };
     console.log(data);
-    this.pqrsService.savePqrs(data).subscribe({
+    this.pqrsService.savePqrs(data, pqrs.tipoPqrs).subscribe({
       next: (res: any) => {
         this.getPQRSList();
         this.message.clear();
