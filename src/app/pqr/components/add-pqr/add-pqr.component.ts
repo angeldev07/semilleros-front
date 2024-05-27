@@ -312,7 +312,7 @@ public submitPqrs() {
     console.log(pqrs);
     this.pqrsService.savePqrs(pqrs, this.pqrsTypes).subscribe({
       next: (res: any) => {
-        // this.pqrsForm.reset();
+        this.pqrsForm.reset();
         this.message.clear();
         this.message.add({ severity: 'success', summary: 'Agregado', detail: 'Se ha enviado el PQRS con exito, se le dará respuesta pronto vía email.' });
       },
