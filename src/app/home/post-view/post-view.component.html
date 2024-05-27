@@ -1,0 +1,28 @@
+<!-- post-view.component.html -->
+<ng-container *ngIf="post; else loading">
+    <main class="container">
+      <div class="row">
+        <section class="col-md-9">
+          <img [src]="post.imagenEncabezado" [alt]="post.titulo" class="img-fluid mb-4">
+          <div *ngFor="let content of getContent()">
+            <div [innerHTML]="content.title + content.content"></div>
+          </div>
+        </section>
+        <section class="col-md-3">
+          <h5>Secciones del artículo</h5>
+          <ul class="list-unstyled">
+            <li *ngFor="let encabezado of post.encabezados">
+              <a [href]="getAnchor(encabezado)">{{ encabezado }}</a>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </ng-container>
+  
+  <ng-template #loading>
+    <div class="text-center">
+      <h1>Cargando información...</h1>
+    </div>
+  </ng-template>
+  

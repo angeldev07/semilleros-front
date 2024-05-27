@@ -1,0 +1,19 @@
+
+/*.cont {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+  }
+  */
+  .img-fluid {
+    object-fit: cover;
+    object-position: center;
+  }
+  .titulo {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .content-container p {
+    margin-bottom: 2rem !important;
+  }
+  
