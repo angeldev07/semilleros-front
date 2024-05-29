@@ -171,6 +171,10 @@ export class HomePageComponent implements OnInit {
       label: 'PQR',
       routerLink: ['']
     },
+    {
+      label: 'Normatividad',
+      routerLink: ['']
+    },
   ]
 
   recentPost = signal<any>({
@@ -181,7 +185,7 @@ export class HomePageComponent implements OnInit {
   constructor(private postService: PostHomeService, private router: Router) { }
 
   ngOnInit() {
-    
+
     this.postService.getPostRecientes().subscribe({
       next: (data) => {
         this.recentPost.set({
