@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-capacitaciones',
   standalone: true,
@@ -138,7 +140,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<th>
       <div class="form-group">
             <label for="logo">Logo:</label>
-            <input type="file" id="logo" accept="image/*" (change)="onFileSelected($event)" class="form-control">
+            <input type="file" id="logo" accept="image/*" (change)="onFileSelected($event, 'image')" class="form-control">
           </div>
               </th>
               
@@ -168,7 +170,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		  
 		  <div class="form-group">
             <label for="contenido">Contenido de la Capacitacion:</label>
-            <input type="file" id="contenido" accept="image/*" (change)="onFileSelected($event)" class="form-control">
+            <input type="file" id="contenido" accept="application/pdf" (change)="onFileSelected($event, 'pdf')" class="form-control">
           </div>
 		  
 		  
@@ -216,6 +218,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CapacitacionesComponent {
+  selectedFiles: { pdf: File | null, image: File | null } = { pdf: null, image: null };
+
+  constructor(private http: HttpClient) {}
 
   informacion : any = {}
 
@@ -251,7 +256,30 @@ export class CapacitacionesComponent {
     localStorage.setItem('semillero', JSON.stringify({ titulo, fechai, fechaf, modalidad, ubicacion, costo, responsable, cargo, correo, telefono, cupos, objetivos, descripcion }));
   }
 
-  onFileSelected(event: any): void {
-    
+
+
+  onFileSelected(event: Event, fileType: 'pdf' | 'image') {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      this.selectedFiles[fileType] = target.files[0];
+    }
   }
+
+  onSubmit() {
+    if (this.selectedFiles.pdf && this.selectedFiles.image) {
+      const formData = new FormData();
+      formData.append('pdf', this.selectedFiles.pdf);
+      formData.append('image', this.selectedFiles.image);
+
+      this.http.post('http://localhost:8080/upload', formData)
+        .subscribe(response => {
+          console.log('Archivos cargados', response);
+        }, error => {
+          console.error('Error al cargar archivos', error);
+        });
+    } else {
+      alert('Por favor seleccione ambos archivos');
+    }
+  }
+
 }
