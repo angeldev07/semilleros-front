@@ -234,44 +234,34 @@ export class CapacitacionesComponent {
 
 
   guardarCapacitacion(): void {
-    const titulo = (document.getElementById('titulo') as HTMLInputElement).value;
-    const fechai = (document.getElementById('fechai') as HTMLInputElement).value;
-    const fechaf = (document.getElementById('fechaf') as HTMLInputElement).value;
-
-    const modalidad = (document.getElementById('modalidad') as HTMLInputElement).value;
-    const ubicacion = (document.getElementById('ubicacion') as HTMLInputElement).value;
-    const costo = (document.getElementById('costo') as HTMLInputElement).value;
-
-    const responsable = (document.getElementById('responsable') as HTMLInputElement).value;
-    const cargo = (document.getElementById('cargo') as HTMLInputElement).value;
-    const correo = (document.getElementById('correo') as HTMLInputElement).value;
-
-    const telefono = (document.getElementById('telefono') as HTMLInputElement).value;
-    const cupos = (document.getElementById('cupos') as HTMLInputElement).value;
-
-    const objetivos = (document.getElementById('objetivos') as HTMLInputElement).value;
-    const descripcion = (document.getElementById('descripcion') as HTMLInputElement).value;
-
-    console.log('Registro guardado:', { titulo, fechai, fechaf, modalidad, ubicacion, costo, responsable, cargo, correo, telefono, cupos, objetivos, descripcion });
-    localStorage.setItem('semillero', JSON.stringify({ titulo, fechai, fechaf, modalidad, ubicacion, costo, responsable, cargo, correo, telefono, cupos, objetivos, descripcion }));
-  }
-
-
-
-  onFileSelected(event: Event, fileType: 'pdf' | 'image') {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      this.selectedFiles[fileType] = target.files[0];
-    }
-  }
-
-  onSubmit() {
     if (this.selectedFiles.pdf && this.selectedFiles.image) {
       const formData = new FormData();
+
+      formData.append('titulo',(document.getElementById('titulo') as HTMLInputElement).value);
+      formData.append('fechai', (document.getElementById('fechai') as HTMLInputElement).value);
+      formData.append('fechaf', (document.getElementById('fechaf') as HTMLInputElement).value);
+
+      formData.append('modalidad', (document.getElementById('modalidad') as HTMLInputElement).value);
+      formData.append('ubicacion',(document.getElementById('ubicacion') as HTMLInputElement).value);
+      formData.append('costo', (document.getElementById('costo') as HTMLInputElement).value);
+
+      formData.append('responsable', (document.getElementById('responsable') as HTMLInputElement).value)
+      formData.append('cargo', (document.getElementById('cargo') as HTMLInputElement).value);
+      formData.append('correo', (document.getElementById('correo') as HTMLInputElement).value);
+
+      formData.append('telefono', (document.getElementById('telefono') as HTMLInputElement).value);
+      formData.append('cupos',(document.getElementById('cupos') as HTMLInputElement).value);
+
+      formData.append('objetivos', (document.getElementById('objetivos') as HTMLInputElement).value);
+      formData.append('descripcion', (document.getElementById('descripcion') as HTMLInputElement).value);
+
+
+
+
       formData.append('pdf', this.selectedFiles.pdf);
       formData.append('image', this.selectedFiles.image);
 
-      this.http.post('http://localhost:8080/upload', formData)
+      this.http.post('http://localhost:8080/guardarCapacitaciones', formData)
         .subscribe(response => {
           console.log('Archivos cargados', response);
         }, error => {
@@ -282,4 +272,12 @@ export class CapacitacionesComponent {
     }
   }
 
+
+
+  onFileSelected(event: Event, fileType: 'pdf' | 'image') {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      this.selectedFiles[fileType] = target.files[0];
+    }
+  }
 }
