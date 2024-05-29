@@ -262,7 +262,7 @@ export class CapacitacionesComponent {
       formData.append('logo', (document.getElementById('logo') as HTMLInputElement).value);
       formData.append('contenido', (document.getElementById('contenido') as HTMLInputElement).value);
 
-      this.http.post('http://localhost:8080/guardarCapacitaciones', formData)
+      this.http.post('http://localhost:8080/api/capacitaciones/crearCapacitaciones', formData)
         .subscribe(response => {
           console.log('Datos cargados', response);
         }, error => {
