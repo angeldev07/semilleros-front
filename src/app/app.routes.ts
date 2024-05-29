@@ -9,6 +9,10 @@ export const routes: Routes = [
         path: 'admin', component: LayoutComponent,
         children: [
             {
+                path: 'dashboard',
+                loadChildren: () => import('./dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
+            },
+            {
                 path: 'eventos',
                 loadChildren: () => import('./eventos/eventos.routes').then(m => m.EVENTOS_ROUTES)
             },
@@ -43,7 +47,7 @@ export const routes: Routes = [
             {
                 path:'',
                 pathMatch: 'full',
-                redirectTo: 'publicaciones'
+                redirectTo: 'dashboard'
             }
         ]
     },
