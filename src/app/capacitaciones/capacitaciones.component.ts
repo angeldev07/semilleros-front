@@ -255,10 +255,6 @@ export class CapacitacionesComponent {
       formData.append('objetivos', (document.getElementById('objetivos') as HTMLInputElement).value);
       formData.append('descripcion', (document.getElementById('descripcion') as HTMLInputElement).value);
 
-      formData.append('objetivos', (document.getElementById('objetivos') as HTMLInputElement).value);
-      formData.append('descripcion', (document.getElementById('descripcion') as HTMLInputElement).value);
-
-
       formData.append('logo', (document.getElementById('logo') as HTMLInputElement).value);
       formData.append('contenido', (document.getElementById('contenido') as HTMLInputElement).value);
 
