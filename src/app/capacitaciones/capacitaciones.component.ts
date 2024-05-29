@@ -139,8 +139,8 @@ import { HttpClient } from '@angular/common/http';
 
 			<th>
       <div class="form-group">
-            <label for="logo">Logo:</label>
-            <input type="file" id="logo" accept="image/*" (change)="onFileSelected($event, 'image')" class="form-control">
+            <label for="logo">Logo (url):</label>
+            <input type="url" id="logo" #mision required class="form-control">
           </div>
               </th>
               
@@ -169,8 +169,8 @@ import { HttpClient } from '@angular/common/http';
           </div>
 		  
 		  <div class="form-group">
-            <label for="contenido">Contenido de la Capacitacion:</label>
-            <input type="file" id="contenido" accept="application/pdf" (change)="onFileSelected($event, 'pdf')" class="form-control">
+            <label for="contenido">Contenido de la Capacitacion (url):</label>
+            <input type="url" id="contenido" #mision required class="form-control">
           </div>
 		  
 		  
@@ -234,7 +234,7 @@ export class CapacitacionesComponent {
 
 
   guardarCapacitacion(): void {
-    if (this.selectedFiles.pdf && this.selectedFiles.image) {
+    
       const formData = new FormData();
 
       formData.append('titulo',(document.getElementById('titulo') as HTMLInputElement).value);
@@ -255,29 +255,20 @@ export class CapacitacionesComponent {
       formData.append('objetivos', (document.getElementById('objetivos') as HTMLInputElement).value);
       formData.append('descripcion', (document.getElementById('descripcion') as HTMLInputElement).value);
 
+      formData.append('objetivos', (document.getElementById('objetivos') as HTMLInputElement).value);
+      formData.append('descripcion', (document.getElementById('descripcion') as HTMLInputElement).value);
 
 
-
-      formData.append('pdf', this.selectedFiles.pdf);
-      formData.append('image', this.selectedFiles.image);
+      formData.append('logo', (document.getElementById('logo') as HTMLInputElement).value);
+      formData.append('contenido', (document.getElementById('contenido') as HTMLInputElement).value);
 
       this.http.post('http://localhost:8080/guardarCapacitaciones', formData)
         .subscribe(response => {
-          console.log('Archivos cargados', response);
+          console.log('Datos cargados', response);
         }, error => {
-          console.error('Error al cargar archivos', error);
+          console.error('Error al cargar los Datos', error);
         });
-    } else {
-      alert('Por favor seleccione ambos archivos');
-    }
+    
   }
 
-
-
-  onFileSelected(event: Event, fileType: 'pdf' | 'image') {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      this.selectedFiles[fileType] = target.files[0];
-    }
-  }
 }
