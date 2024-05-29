@@ -20,10 +20,15 @@ export class PostService {
           imagen: post.imagen,
           fechaCreacion: post.fechaCreacion,
           tag: post.tag,
-          link: post.link
+          link: post.link,
+          uniqueTitleId: post.uniqueTitleId
         }) )
       })
     )
+  }
+
+  eliminarPost(uniqueId: string){
+    return this.http.delete(`${environment.api}/posts/delete/${uniqueId}`)
   }
 
   crearPost(data: any){

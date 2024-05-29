@@ -7,6 +7,7 @@ import { MessagesModule } from 'primeng/messages';
 import { TableModule } from 'primeng/table';
 import { PostService } from '../../services/post.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog-admin-list',
@@ -55,12 +56,14 @@ import { TooltipModule } from 'primeng/tooltip';
                             icon="pi pi-eye"
                             class="p-button-rounded p-button-info"
                             pTooltip="Ver post" tooltipPosition="top"
+                            (click)="nagivateToPost(postLista.uniqueTitleId)"
                         ></button>
                         <button
                             pButton
                             icon="pi pi-trash"
                             class="p-button-rounded p-button-danger"
                             pTooltip="eliminar post" tooltipPosition="top"
+                            (click)="deletePost(postLista.id)"
                         ></button>
                     </td>
                 </tr>
@@ -95,7 +98,8 @@ export class BlogAdminListComponent implements OnInit {
   messages: Message[] = [{ severity: 'info', summary: 'Lista vacia', detail: 'No hay pqrs por mostrar' }];
 
   constructor(
-    private postService: PostService
+    private postService: PostService,
+    private router: Router
   ) { }
 
   ngOnInit(): void { 
@@ -108,6 +112,24 @@ export class BlogAdminListComponent implements OnInit {
         })
       }
     })
+  }
+
+  deletePost(uniqueId: string){
+    this.postService.eliminarPost(uniqueId).subscribe({
+      next: (res) => {
+        window.location.reload()
+      },
+      error: (err) => {
+        window.location.reload()
+      }
+    })
+  }
+
+  nagivateToPost(postId: string){
+    // que se abra en una nueva pestaña
+    console.log(postId);
+    
+    this.router.navigate([`/publicaciones/${postId}`])
   }
 
 
