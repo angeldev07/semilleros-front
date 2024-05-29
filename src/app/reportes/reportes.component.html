@@ -4,13 +4,13 @@
     <!-- Aquí se mostrarán los reportes -->
     <div class="report">
       <h3>Publicaciones en el mes</h3>
-      <p>Cantidad de publicaciones: {{ cant_publicaciones }}</p>
+      <p>Cantidad de publicaciones: {{ posts.length }}</p>
       <button (click)="generarPublicaciones()">Descargar Reporte de publicaciones</button>
     </div>
     <div class="report">
-      <h3>Estudiantes matriculados en el mes</h3>
-      <p>Cantidad de estudiantes: {{ alumnosMes }}</p>
-      <button (click)="generarAlumnos()">Descargar Reporte de Alumnos</button>
+      <h3>Estudiantes matriculados</h3>
+      <p>Cantidad de estudiantes: {{ alumnos.length }}</p>
+      <button (click)="getEnrolledStudents()">Descargar Reporte de Alumnos</button>
     </div>
     <button (click)="generarGeneral()" id="botoncenter">Descargar Reporte General</button>
   </div>
