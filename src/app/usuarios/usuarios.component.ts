@@ -1,79 +1,151 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { DropdownModule } from 'primeng/dropdown';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+
+
+import { PqrsListComponent } from './components/usr-list/usr-list.component';
+import { AddPqrsComponent } from './components/add-usr/add-usr.component';
+import { PQR } from './api/usr';
+import { PqrsService } from './services/usr.service';
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
+
   selector: 'app-usuarios',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule,  // Import ReactiveFormsModule here
-    DropdownModule
+   ButtonModule,
+    PqrsListComponent,
+    AddPqrsComponent
   ],
   template: `
-    <div class="p-fluid">
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <!-- Form fields go here -->
-        <button type="submit" pButton label="Register" [disabled]="!registerForm.valid"></button>
-      </form>
-    </div>
+          <section
+        class="card flex justify-content-between align-items-center px-4"
+        >
+        <h2 class="mb-0 text-2xl md:text-3xl">Crear un nuevo usuario</h2>
+                <p-button
+                    label="Agregar"
+                    icon="pi pi-plus"
+                    [iconPos]="'right'"
+                    [outlined]="true"
+                    (onClick)="openAddPQRDialog = true"
+                ></p-button>
+        </section>
+        <section>
+        <app-pqrs-list
+            [pqrs]="pqrsLista"
+            (deletePQRS)="deletePQRS($event)"
+            (changeStatePQRS)="changeStatePQRS($event.id, $event.state)"
+        ></app-pqrs-list>
+        </section>
+        @if (openAddPQRDialog) {
+          <app-add-pqrs
+            (savePQRS)="savePQRS($event)"
+            [(visible)]="openAddPQRDialog"
+          ></app-add-pqrs>
+            }
   `,
-  styles: [`
-    :host {
-      display: block;
-      padding: 2rem;
-    }
-    .p-field {
-      margin-bottom: 1rem;
-    }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: ``,
+  providers: [MessageService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+
 export class UsuariosComponent implements OnInit {
-  registerForm: FormGroup;
-  roles = [
-    { id: 1, name: 'ADMIN' },
-    { id: 2, name: 'DIRECTOR' },
-    { id: 3, name: 'USER' }
-  ];
+  openAddPQRDialog = false;
+  nextState = '';
+  pqrsList = signal<PQR[]>([]);
+  selectedPQRS = signal<PQR | null | number[]>(null);
 
   constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private pqrsService: PqrsService,
+    private message: MessageService
   ) {
-    this.registerForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(5)]],
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      codigoUniversidad: ['', Validators.required],
-      semestreActual: ['', Validators.required],
-      edad: ['', Validators.required],
-      direccionResidencia: ['', Validators.required],
-      celular: ['', Validators.required],
-      role: ['', Validators.required]
-    });
   }
 
   ngOnInit(): void {
-    // Additional initialization tasks can be performed here
+    this.getPQRSList();
   }
 
-  onSubmit(): void {
-    if (this.registerForm.valid) {
-      this.http.post('http://localhost:8080/api/users/register', this.registerForm.value).subscribe({
-        next: (response) => {
-          console.log('User registered successfully!', response);
-          this.cdr.markForCheck();  // Trigger change detection manually
-        },
-        error: (error) => {
-          console.error('Error registering user', error);
-          this.cdr.markForCheck();  // Trigger change detection manually
-        }
-      });
-    }
+  get pqrsLista(){
+    return this.pqrsList();
   }
+
+  getPQRSList(){
+    this.pqrsService.getPqrs().subscribe({
+      next: (res: any) => {
+        this.pqrsList.set(res);
+      },
+      error: (err: any) => {
+        console.log(err)
+      }
+
+    })
+  }
+
+  savePQRS(pqrs: PQR){
+    const data = {
+      nombre: pqrs.nombre,
+      apellido: pqrs.apellido,
+      cedula: pqrs.cedula,
+      correo: pqrs.correo,
+      anonimo: pqrs.anonimo,
+      titulo: pqrs.titulo,
+      descripcion: pqrs.descripcion,
+      tipoPqrs: pqrs.tipoPqrs,
+    };
+    console.log(data);
+    this.pqrsService.savePqrs(data).subscribe({
+      next: (res: any) => {
+        this.getPQRSList();
+        this.message.clear();
+        this.message.add({ severity: 'success', summary: 'Agregado', detail: 'Se ha enviado el PQRS con exito' });
+      },
+      error: (err: any) => {
+        this.message.clear();
+        this.message.add({ severity: 'error', summary: 'Error :(', detail: 'Ha ocurrido un error inesperado. Intentelo de nuevo' });
+        console.log(err);
+      }
+    })
+  }
+
+
+  deletePQRS(id: number) {
+    this.pqrsService.deletePqrs(id).subscribe({
+        next: () => {
+            this.getPQRSList();
+            this.message.clear();
+            this.message.add({ severity: 'success', summary: 'Eliminado', detail: 'Se ha eliminado el radicado con éxito' });
+        },
+        error: (err) => {
+            this.message.clear();
+            this.message.add({ severity: 'error', summary: 'Error :(', detail: 'Ha ocurrido un error inesperado. Intentelo de nuevo' });
+            console.log(err);
+        },
+    });
 }
+
+changeStatePQRS(id: number, state: string){
+  if(state === 'PENDIENTE'){
+    this.nextState = 'revision';
+  }else{
+    this.nextState = 'resuelto';
+  }
+  this.pqrsService.changeStatePqrs(id, this.nextState).subscribe({
+    next: () => {
+      this.getPQRSList();
+      this.message.clear();
+      this.message.add({ severity: 'success', summary: 'Actualizado', detail: 'Se ha actualizado el estado del radicado con éxito' });
+    },
+    error: (err) => {
+      this.message.clear();
+      this.message.add({ severity: 'error', summary: 'Error :(', detail: 'Ha ocurrido un error inesperado. Intentelo de nuevo' });
+      console.log(err);
+    }
+  })
+}
+
+  
+
+}
+
