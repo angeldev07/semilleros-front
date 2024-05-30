@@ -14,10 +14,18 @@ export class PqrsService {
     return this.http.get(`${environment.api}/pqrs`);
   }
 
-  savePqrs(pqrs: PQR) {
+  getPQRSById(id: number) {
+    return this.http.get<PQR>(`${environment.api}/pqrs/${id}`);
+  }
+
+  savePqrs(pqrs: PQR, tipoPqrs: number) {
     const url = `${environment.api}/pqrs/create`;
-    const params = { tipoPQRSID: pqrs.tipoPqrs };
+    const params = { tipoPQRSID: tipoPqrs };
     return this.http.post<PQR>(url, pqrs, { params });
+  }
+
+  sendAnswerPqrs(id: number, respuesta: string) {
+    return this.http.post(`${environment.api}/pqrs/respuesta?pqrsId=${id}`, { respuesta });
   }
 
   deletePqrs(id: number) {

@@ -1,0 +1,14 @@
+<div class="container">
+    <h1>Listado de Normatividades</h1>
+    <button (click)="addNormatividad()">Agregar Nueva Normatividad</button>
+    <div *ngIf="normatividades && normatividades.length; else emptyList">
+      <ul>
+        <li *ngFor="let normatividad of normatividades">
+          {{ normatividad.titulo }}; {{ normatividad.fecha }}
+        </li>
+      </ul>
+    </div>
+    <ng-template #emptyList>
+      <p>No hay normatividades para mostrar. Añade una nueva para comenzar.</p>
+    </ng-template>
+  </div>
