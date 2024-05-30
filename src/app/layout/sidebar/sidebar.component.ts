@@ -15,6 +15,23 @@ import { LayoutService } from '../services/layout.service';
     :host {
       display: block;
     }
+      .layout-menu {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .layout-menu li {
+        margin-bottom: 1em;
+      }
+
+      .layout-menu li a {
+        text-decoration: none;
+      }
+
+      .layout-menu li a:hover {
+        text-decoration: none;
+      }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

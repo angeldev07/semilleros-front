@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal, type OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { CalendarComponent } from '../../calendar/calendar.component'; // Importa CalendarComponent
 import { PostHomeService } from '../service/post-home.service';
 
 @Component({
-  selector: 'app-home-page',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  template: `
+    selector: 'app-home-page',
+    standalone: true, // Añade CalendarComponent aquí
+    template: `
       <!-- redes sociales -->
     <div id ="sec">
       <section  class="d-flex justify-content-center align-items-center px-4 mt-0 pt-4 ">
@@ -130,45 +130,45 @@ import { PostHomeService } from '../service/post-home.service';
       </section>
     </main>
     
+    <!-- Añadir CalendarComponent aquí -->
+    <app-calendar></app-calendar>
     `,
-  styles: `
+    styles: `
+    .post-header{
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+    }
 
+    .img-container{
+        width: 100%;
+        height: 500px;
+    }
 
-  .post-header{
-      width: 100%;
-      max-width: 1200px;
-      margin: auto;
-  }
+    .img-container  .img-r img{
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
 
-  .img-container{
-      width: 100%;
-      height: 500px;
-  }
+    .tag{
+        top: 25px;
+        left: 25px;
+    }
 
-
-  .img-container  .img-r img{
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-  }
-
-  .tag{
-      top: 25px;
-      left: 25px;
-  }
-
-  .desc{
-      position: absolute;
-      width: 98%;
-      bottom: 5px;
-      background-color: #f5f5dc34;
-      color: #fff;
-  }
-#sec{
-background-color: rgb(2,2,2);
-}
-    `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    .desc{
+        position: absolute;
+        width: 98%;
+        bottom: 5px;
+        background-color: #f5f5dc34;
+        color: #fff;
+    }
+    #sec{
+      background-color: rgb(2,2,2);
+    }
+  `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, RouterLink, CalendarComponent]
 })
 export class HomePageComponent implements OnInit {
   options: any = [
@@ -206,7 +206,6 @@ export class HomePageComponent implements OnInit {
   constructor(private postService: PostHomeService, private router: Router) { }
 
   ngOnInit() {
-
     this.postService.getPostRecientes().subscribe({
       next: (data) => {
         this.recentPost.set({

@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './auth/login/login.component';
+import { CalendarComponent } from './calendar/calendar.component'; // Importa CalendarComponent
 import { HomeComponent } from './home/home.component';
-
+import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
     {
@@ -35,7 +35,7 @@ export const routes: Routes = [
             {
               path: 'reportes',
               loadChildren: () => import('./reportes/reportes.routes').then(m => m.REPORTES_ROUTES)
-          },
+            },
             {
                 path: 'pqr',
                 loadChildren: () => import('./pqr/pqr.routes').then(m => m.PQR_ROUTES)
@@ -49,11 +49,11 @@ export const routes: Routes = [
                 loadChildren: () => import('./normatividad/normatividad-routing.module').then(m => m.NormatividadRoutingModule)
             },
             {    
-                 path: 'redes-sociales',
-                 loadChildren: () => import('./redes-sociales/redes-sociales.routes').then(m => m.REDES_SOCIALES_ROUTES)
+                path: 'redes-sociales',
+                loadChildren: () => import('./redes-sociales/redes-sociales.routes').then(m => m.REDES_SOCIALES_ROUTES)
             },
             {
-                path:'',
+                path: '',
                 pathMatch: 'full',
                 redirectTo: 'publicaciones'
             }
@@ -67,5 +67,9 @@ export const routes: Routes = [
         path: '',
         component: HomeComponent,
         loadChildren: () => import('./home/home.routes').then(h => h.HOME_ROUTES)
+    },
+    {
+        path: 'calendar', // Agrega esta ruta para CalendarComponent
+        component: CalendarComponent
     },
 ];
