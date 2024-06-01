@@ -1,17 +1,78 @@
-<body>
-  <h2>{{ titulo }}</h2>
-  <div id="reports">
-    <!-- Aquí se mostrarán los reportes -->
-    <div class="report">
-      <h3>Publicaciones en el mes</h3>
-      <p>Cantidad de publicaciones: {{ posts.length }}</p>
-      <button (click)="generarPublicaciones()">Descargar Reporte de publicaciones</button>
+<body class="bg-gray-100 font-sans">
+  <div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4">{{ titulo }}</h2>
+    <div id="reports" class="space-y-8">
+      <!-- Aquí se mostrarán los reportes -->
+
+      <div class="report bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-xl font-semibold mb-4">Listado de Usuarios Matriculados</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full table-auto">
+            <thead>
+              <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th class="py-3 px-6 text-left">Nombre</th>
+                <th class="py-3 px-6 text-left">Email</th>
+                <th class="py-3 px-6 text-left">Código Universidad</th>
+                <th class="py-3 px-6 text-left">Semestre Actual</th>
+                <th class="py-3 px-6 text-left">Edad</th>
+                <th class="py-3 px-6 text-left">Dirección Residencia</th>
+                <th class="py-3 px-6 text-left">Celular</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+              <tr *ngFor="let usuario of usuariosMatriculados" class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6">{{ usuario.name }}</td>
+                <td class="py-3 px-6">{{ usuario.email }}</td>
+                <td class="py-3 px-6">{{ usuario.codigoUniversidad }}</td>
+                <td class="py-3 px-6">{{ usuario.semestreActual }}</td>
+                <td class="py-3 px-6">{{ usuario.edad }}</td>
+                <td class="py-3 px-6">{{ usuario.direccionResidencia }}</td>
+                <td class="py-3 px-6">{{ usuario.celular }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-4">
+          <button (click)="generarReporteAlumnos()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Descargar Reporte de Alumnos
+          </button>
+        </div>
+      </div>
+
+      <div class="report bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-xl font-semibold mb-4">Listado de Posts Publicados</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full table-auto">
+            <thead>
+              <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th class="py-3 px-6 text-left">ID</th>
+                <th class="py-3 px-6 text-left">Titulo</th>
+                <th class="py-3 px-6 text-left">Fecha de Creación</th>
+                <th class="py-3 px-6 text-left">Tipo</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+              <tr *ngFor="let post of postsPublicados" class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6">{{ post.id }}</td>
+                <td class="py-3 px-6">{{ post.titulo }}</td>
+                <td class="py-3 px-6">{{ post.fechaCreacion | date:'yyyy-MM-dd' }}</td>
+                <td class="py-3 px-6">{{ post.tag }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-4">
+          <button (click)="generarReportePublicaciones()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Descargar Reporte de publicaciones
+          </button>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button (click)="generarReporteGeneral()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+          Descargar Reporte General
+        </button>
+      </div>
     </div>
-    <div class="report">
-      <h3>Estudiantes matriculados</h3>
-      <p>Cantidad de estudiantes: {{ alumnos.length }}</p>
-      <button (click)="getEnrolledStudents()">Descargar Reporte de Alumnos</button>
-    </div>
-    <button (click)="generarGeneral()" id="botoncenter">Descargar Reporte General</button>
   </div>
 </body>

@@ -8,62 +8,41 @@ import { jsPDF } from 'jspdf';
   selector: 'app-reportes',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './reportes.component.html',
-  styleUrls: ['./reportes.component.css']
+  templateUrl: './reportes.component.html'
 })
 export class ReportesComponent implements OnInit {
-  public alumnos: any[] = [];
-  public posts: any[] = [];
+  public usuariosMatriculados: any[] = [];
+  public postsPublicados: any[] = [];
   public titulo = "Reportes"; // titulo principal
-
-
-  public cant_publicaciones = 10;
-  public alumnosMes = 30;
-
 
   constructor(private alumnosService: AlumnosService, private postsService: PostsService) { }
 
   ngOnInit() {
-    this.getEnrolledStudents();
+    this.getUsuariosMatriculados();
     this.getPosts();
   }
 
-  getEnrolledStudents() {
-    this.alumnosService.getEnrolledStudents()
+  getUsuariosMatriculados() {
+    this.alumnosService.getUsuariosMatriculados()
       .subscribe(
         (res: any) => {
-          console.log('Respuesta de la petición HTTP:', res);
-          this.alumnos = res;
-          console.log('Alumnos asignados:', this.alumnos);
-          this.generarAlumnos();
+          console.log('Respuesta de la petición HTTP de usuarios matriculados:', res);
+          this.usuariosMatriculados = res;
+          console.log('Usuarios matriculados asignados:', this.usuariosMatriculados);
         },
         error => {
-          console.error('Error al obtener los alumnos:', error);
+          console.error('Error al obtener los usuarios matriculados:', error);
         }
       );
   }
-
-  generarAlumnos() {
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text('Reporte de Alumnos Matriculados', 20, 20);
-    doc.setFontSize(12);
-    this.alumnos.forEach((alumno, index) => {
-      const y = 40 + (index * 10);
-      doc.text(`${alumno.name} - ${alumno.email}`, 20, y);
-    });
-    doc.save('reporte-alumnos.pdf');
-  }
-
 
   getPosts() {
     this.postsService.getPosts()
       .subscribe(
         (res: any) => {
           console.log('Respuesta de la petición HTTP de publicaciones:', res);
-          this.posts = res;
-          console.log('Publicaciones asignadas:', this.posts);
-          this.generarPublicaciones();
+          this.postsPublicados = res;
+          console.log('Publicaciones asignadas:', this.postsPublicados);
         },
         error => {
           console.error('Error al obtener las publicaciones:', error);
@@ -71,22 +50,35 @@ export class ReportesComponent implements OnInit {
       );
   }
 
+  generarReporteAlumnos() {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text('Reporte de Alumnos Matriculados', 20, 20);
+    doc.setFontSize(12);
+    this.usuariosMatriculados.forEach((alumno, index) => {
+      const y = 40 + (index * 10);
+      doc.text(`${alumno.codigoUniversidad} - ${alumno.name} - ${alumno.email} - ${alumno.semestreActual}`, 20, y);
+    });
+    doc.save('reporte-alumnos.pdf');
+  }
 
-  generarPublicaciones() {
+  generarReportePublicaciones() {
     const doc = new jsPDF();
     doc.setFontSize(18);
     doc.text('Reporte de Publicaciones', 20, 20);
     doc.setFontSize(12);
 
-    this.posts.forEach((post, index) => {
+    this.postsPublicados.forEach((post, index) => {
       const y = 40 + (index * 10);
-      doc.text(`${post.titulo} - ${post.fechaCreacion}`, 20, y);
+      const fechaCreacion = new Date(post.fechaCreacion);
+      const fechaFormateada = `${fechaCreacion.getFullYear()}-${('0' + (fechaCreacion.getMonth() + 1)).slice(-2)}-${('0' + fechaCreacion.getDate()).slice(-2)}`;
+      doc.text(`${post.titulo} - ${fechaFormateada} - ${post.tag}`, 20, y);
     });
 
     doc.save('reporte-publicaciones.pdf');
   }
 
-  generarGeneral() {
+  generarReporteGeneral() {
     const doc = new jsPDF();
 
     // Agregar sección de alumnos matriculados
@@ -94,20 +86,20 @@ export class ReportesComponent implements OnInit {
     doc.text('Reporte de Alumnos Matriculados', 20, 20);
     doc.setFontSize(12);
 
-    this.alumnos.forEach((alumno, index) => {
+    this.usuariosMatriculados.forEach((alumno, index) => {
       const y = 40 + (index * 10);
-      doc.text(`${alumno.name} - ${alumno.email}`, 20, y);
+      doc.text(`${alumno.codigoUniversidad} - ${alumno.name} - ${alumno.email} - ${alumno.semestreActual}`, 20, y);
     });
 
     // Agregar sección de publicaciones
-    const yOffset = 40 + (this.alumnos.length * 10) + 20;
+    const yOffset = 40 + (this.usuariosMatriculados.length * 10) + 20;
     doc.setFontSize(18);
     doc.text('Reporte de Publicaciones', 20, yOffset);
     doc.setFontSize(12);
 
-    this.posts.forEach((post, index) => {
+    this.postsPublicados.forEach((post, index) => {
       const y = yOffset + 20 + (index * 10);
-      doc.text(`${post.titulo} - ${post.fechaCreacion}`, 20, y);
+      doc.text(`${post.titulo} - ${post.fechaCreacion} - ${post.tag}`, 20, y);
     });
 
     doc.save('reporte-general.pdf');
