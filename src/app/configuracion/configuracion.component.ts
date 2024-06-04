@@ -1,123 +1,110 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ConfigService } from './services/configuracion.service';
+import { Router } from '@angular/router';
+
 
 @Component({
+  imports: [
+    CommonModule // Asegúrate de importar CommonModule aquí
+  ],
   selector: 'app-configuracion',
   standalone: true,
-  imports: [],
-  template: `
-    <div>
-      <h2>Registro de Semillero</h2>
-      <form (submit)="guardarRegistro()">
-        <div class="form-section">
-          <div class="section-title">Información General</div>
-          <div class="form-group">
-            <label for="logo">Logo o Imagen:</label>
-            <input type="file" id="logo" accept="image/*" (change)="onFileSelected($event)" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="nombre">Nombre del Semillero:</label>
-            <input type="text" id="nombre" #nombre required class="form-control" [value]="informacion.nombre">
-          </div>
-          <div class="form-group">
-            <label for="sigla">Sigla del Semillero:</label>
-            <input type="text" id="sigla" #sigla required class="form-control" [value]="informacion.sigla">
-          </div>
-        </div>
-
-        <div class="form-section">
-          <div class="section-title">Descripción</div>
-          <div class="form-group">
-            <label for="mision">Misión:</label>
-            <textarea id="mision" #mision required class="form-control" [value]="informacion.mision"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="vision">Visión:</label>
-            <textarea id="vision" #vision required class="form-control" [value]="informacion.vision"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="palabrasClave">Palabras Clave:</label>
-            <input type="text" id="palabrasClave" #palabrasClave required class="form-control" [value]="informacion.palabrasClave">
-          </div>
-        </div>
-
-        <div class="form-section">
-          <div class="section-title">Contacto</div>
-          <div class="form-group">
-            <label for="director">Director del Semillero:</label>
-            <input type="text" id="director" #director required class="form-control" [value]="informacion.director">
-          </div>
-          <div class="form-group">
-            <label for="whatsapp">Whatsapp:</label>
-            <input type="text" id="whatsapp" #whatsapp required class="form-control" [value]="informacion.whatsapp">
-          </div>
-          <div class="form-group">
-            <label for="instagram">Instagram:</label>
-            <input type="text" id="instagram" #instagram required class="form-control" [value]="informacion.instagram">
-          </div>
-          <div class="form-group">
-            <label for="facebook">Facebook:</label>
-            <input type="text" id="facebook" #facebook required class="form-control" [value]="informacion.facebook">
-          </div>
-          <div class="form-group">
-            <label for="correo">Correo Electrónico:</label>
-            <input type="email" id="correo" #correo required class="form-control" [value]="informacion.correo">
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar</button>
-      </form>
-    </div>
-  `,
-  styles: [`
-    .form-section {
-      margin-bottom: 20px;
-    }
-    .section-title {
-      background-color: #f0f0f0;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-control {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    .btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #0056b3;
-    }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './configuracion.component.html',
+  styleUrl: './configuracion.component.css'  
 })
-export class ConfiguracionComponent {
+export class ConfiguracionComponent implements OnInit{
 
   informacion : any = {}
+  templateLoaded: boolean = false;
 
-  ngOnInit(): void {
+  constructor(private router: Router, private configService: ConfigService){ }
+
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.informacion = JSON.parse(localStorage.getItem('semillero') || '{}');
+    /*ngOnInit(){
+    const nombre = "ola";
+    const sigla = "ola";
+    const mision = "ola";
+    const vision = "ola";
+    const palabrasClave = "ola";
+    const director = "ola";
+    const whatsapp = "ola";
+    const instagram = "ola";
+    const facebook = "ola";
+    const correo = "ola";
+      localStorage.setItem('semillero', JSON.stringify({ nombre, sigla, mision, vision, palabrasClave, director, whatsapp, instagram, facebook, correo }));
+      this.informacion = JSON.parse(localStorage.getItem('semillero') || '{}');
+      console.log(this.informacion)
+    }*/
+    
+    async ngOnInit(): Promise<void> {
+      try {
+        /*
+        this.informacion = await this.configService.getConfig().subscribe({
+        );
+        console.log(this.informacion.correo, "el correo");
+        this.templateLoaded = true;
+        setTimeout(() => {
+          console.log('ya viene')
+        }, 3000);
+        setTimeout(() => {
+          this.submitConfig();
+          setTimeout(() => {
+            this.submitConfig();          
+          }, 3000);       
+        }, 3000);
+         */
 
-  }
+        this.configService.getConfig().subscribe(res => {
+          this.informacion = res
+          console.log(res);
+          (document.getElementById('nombre') as HTMLInputElement).value = this.informacion.nombre,
+          (document.getElementById('sigla') as HTMLInputElement).value = this.informacion.sigla,
+          (document.getElementById('mision') as HTMLTextAreaElement).value = this.informacion.mision,
+          (document.getElementById('vision') as HTMLTextAreaElement).value = this.informacion.vision,
+          (document.getElementById('palabrasClave') as HTMLInputElement).value = this.informacion.palabrasClave,
+          (document.getElementById('director') as HTMLInputElement).value = this.informacion.director,
+          (document.getElementById('whatsapp') as HTMLInputElement).value = this.informacion.whatsapp,
+          (document.getElementById('instagram') as HTMLInputElement).value = this.informacion.instagram,
+          (document.getElementById('facebook') as HTMLInputElement).value = this.informacion.facebook,
+          (document.getElementById('correo') as HTMLInputElement).value = this.informacion.correo
+        })} catch (error) {
+        console.error('Error getting config:', error);
+      }
+    }
+
+  
+
+  public submitConfig() {
+    
+    const configuracion: any = {
+      nombre: (document.getElementById('nombre') as HTMLInputElement).value,
+      sigla: (document.getElementById('sigla') as HTMLInputElement).value,
+      mision: (document.getElementById('mision') as HTMLTextAreaElement).value,
+      vision: (document.getElementById('vision') as HTMLTextAreaElement).value,
+      palabrasClave: (document.getElementById('palabrasClave') as HTMLInputElement).value,
+      director: (document.getElementById('director') as HTMLInputElement).value,
+      whatsapp: (document.getElementById('whatsapp') as HTMLInputElement).value,
+      instagram: (document.getElementById('instagram') as HTMLInputElement).value,
+      facebook: (document.getElementById('facebook') as HTMLInputElement).value,
+      correo: (document.getElementById('correo') as HTMLInputElement).value
+    };
+
+    console.log(configuracion);
+    this.configService.putConfig(configuracion).subscribe({
+      next: (res: any) => {
+        this.displayMessage('success', 'Se ha agregado la nueva configuración con éxito.');
+      },
+      error: (err: any) => {
+        this.displayMessage('error', 'Ha ocurrido un error inesperado. Intentelo de nuevo');
+        console.log(err);
+      }
+    })
+}
 
 
-  guardarRegistro(): void {
+  /*guardarRegistro(): void {
     const nombre = (document.getElementById('nombre') as HTMLInputElement).value;
     const sigla = (document.getElementById('sigla') as HTMLInputElement).value;
     const mision = (document.getElementById('mision') as HTMLTextAreaElement).value;
@@ -131,6 +118,21 @@ export class ConfiguracionComponent {
 
     console.log('Registro guardado:', { nombre, sigla, mision, vision, palabrasClave, director, whatsapp, instagram, facebook, correo });
     localStorage.setItem('semillero', JSON.stringify({ nombre, sigla, mision, vision, palabrasClave, director, whatsapp, instagram, facebook, correo }));
+  }*/
+
+  private displayMessage(type: string, message: string): void {
+    const messageContainer = document.getElementById('messageContainer');
+    if (messageContainer) {
+      const messageElement = document.createElement('div');
+      messageElement.className = type;
+      messageElement.textContent = message;
+      messageContainer.appendChild(messageElement);
+
+      // Remove the message after 5 seconds
+      setTimeout(() => {
+        messageContainer.removeChild(messageElement);
+      }, 5000);
+    }
   }
 
   onFileSelected(event: any): void {

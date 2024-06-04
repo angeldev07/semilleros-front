@@ -20,6 +20,10 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 export class HomeComponent {
   options: any = [
     {
+      label: 'Semillero',
+      routerLink: ['semillero']
+    },
+    {
       label: 'Eventos',
       routerLink: ['']
     },

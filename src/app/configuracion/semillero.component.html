@@ -1,0 +1,87 @@
+<div class="container">
+    <h2 class="text-center mt-4 mb-4 text-danger">Registro de Semillero</h2>
+    <div *ngIf="informacion" class="card bg-light">
+      <div class="card-header bg-danger text-white">Información General</div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Logo o Imagen:</label>
+          <div class="col-sm-9">
+            <img src="./img/siredse.jpg" alt="" class="img-fluid">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Nombre del Semillero:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.nombre}}</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Sigla del Semillero:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.sigla}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="informacion" class="card bg-light mt-4">
+      <div class="card-header bg-danger text-white">Descripción</div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Misión:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.mision}}</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Visión:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.vision}}</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Palabras Clave:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.palabrasClave}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="informacion" class="card bg-light mt-4">
+      <div class="card-header bg-danger text-white">Contacto</div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Director del Semillero:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.director}}</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Whatsapp:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.whatsapp}}</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Instagram:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.instagram}}</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Facebook:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.facebook}}</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label font-weight-bold">Correo Electrónico:</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{informacion.correo}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
