@@ -1,7 +1,7 @@
 <body class="bg-gray-100 font-sans">
   <div class="container mx-auto px-4 py-8">
     <h2 class="text-2xl font-bold mb-4">{{ titulo }}</h2>
-    <div id="reports" class="space-y-8">
+    <div id="reports2" class="space-y-8">
       <!-- Aquí se mostrarán los reportes -->
 
       <div class="report bg-white rounded-lg shadow-md p-6">
@@ -76,3 +76,10 @@
     </div>
   </div>
 </body>
+<div id="reports">
+  <!-- Aquí se mostrarán los reportes -->
+  <div class="report">
+    <h2>Generar Formato FO-14</h2>
+    <button class="styled-button" (click)="generarFormato14()">Descargar Formato 14</button>
+  </div>
+</div>

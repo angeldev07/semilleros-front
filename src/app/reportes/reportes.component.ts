@@ -2,20 +2,22 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';
 import { AlumnosService } from './services/alumnos.service';
 import { PostsService } from './services/posts.service';
+import { FormatoService } from './services/formato.sevice';
 import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-reportes',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './reportes.component.html'
+  templateUrl: './reportes.component.html',
+  styleUrls: ['./reportes.component.css']
 })
 export class ReportesComponent implements OnInit {
   public usuariosMatriculados: any[] = [];
   public postsPublicados: any[] = [];
   public titulo = "Reportes"; // titulo principal
 
-  constructor(private alumnosService: AlumnosService, private postsService: PostsService) { }
+  constructor(private alumnosService: AlumnosService, private postsService: PostsService, private formatoService: FormatoService) { }
 
   ngOnInit() {
     this.getUsuariosMatriculados();
@@ -104,4 +106,22 @@ export class ReportesComponent implements OnInit {
 
     doc.save('reporte-general.pdf');
   }
+
+  generarFormato14() {
+    const email = 'defefefdedw@gmail.com';
+    this.formatoService.downloadFormato14(email).subscribe((blob: Blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'document.docx';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, (error: any) => {
+      console.error('Error al descargar el documento:', error);
+    });
+  }
+
+
 }

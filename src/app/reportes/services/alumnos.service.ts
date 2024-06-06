@@ -11,10 +11,10 @@ export class AlumnosService {
   constructor(private http: HttpClient) { }
 
   getEnrolledStudents(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/alumnos`);
+    return this.http.get<any[]>(`${this.apiUrl}/reportes/users`);
   }
 
   getUsuariosMatriculados(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reportes/enrolled-students`);
+    return this.http.get<any[]>(`${this.apiUrl}/reportes/users`);
   }
 }
