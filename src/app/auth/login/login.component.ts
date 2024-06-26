@@ -1,17 +1,38 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [
-    CommonModule,
-  ],
-  template: `<p>login works!</p>`,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
+  loginData = {
+    email: '',
+    password: ''
+  };
+  errorMessage: string = '';
 
-  ngOnInit(): void { }
+  constructor(private authService: AuthService, private router: Router) {}
 
+  onSubmit() {
+    this.authService.login(this.loginData).subscribe(
+      (response) => {
+        const token = response.token;
+        const userRole = response.role;
+        localStorage.setItem('token', token); // Guarda el token en el almacenamiento local
+        if (userRole === 'ADMIN') {
+          this.router.navigate(['/admin/dashboard']);
+        } else if (userRole === 'DIRECTOR') {
+          this.router.navigate(['/director/dashboard']);
+        } else {
+          this.router.navigate(['/user/semilleros']);
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Credenciales incorrectas';
+      }
+    );
+  }
 }

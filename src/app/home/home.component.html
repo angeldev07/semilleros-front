@@ -16,40 +16,27 @@
         </ul>
     </section>
 
-    <nav
-        class="bg-black-alpha-70 flex justify-content-between align-items-center px-4"
-    >
-        <a
-        [routerLink]="['/']"
-        class="inline-block  text-white underline py-3 px-4 inicio"
-        >
-        Inicio
+    <nav class="bg-black-alpha-70 flex justify-content-between align-items-center px-4">
+        <a [routerLink]="['/']" class="inline-block text-white underline py-3 px-4 inicio">
+            Inicio
         </a>
 
-        <ul class=" flex align-items-center list-none p-0 m-0 gap-3">
-        @for (option of options; track $index) {
-        <li>
-            <a
-            [routerLink]="option.routerLink"
-            class="inline-block text-black py-3 px-4 text-white hover:underline transition-all transition-duration-100"
-            >
+        <ul class="flex align-items-center list-none p-0 m-0 gap-3">
+        <!-- Aquí suponemos que tienes una variable `options` que contiene las opciones del menú -->
+        <li *ngFor="let option of options">
+            <a [routerLink]="option.routerLink" class="inline-block text-white py-3 px-4 hover:underline transition-all transition-duration-100">
             {{ option.label }}
             </a>
         </li>
-        }
         </ul>
 
         <div>
-        <a
-            [routerLink]="['/admin']"
-            class="inline-block  text-white py-3 px-4 inicio hover:bg-red-600 transition-all transition-duration-100"
-        >
-            Iniciar sesion
+        <a [routerLink]="['/auth/login']" class="inline-block text-white py-3 px-4 hover:bg-red-600 transition-all transition-duration-100">
+            Iniciar sesión
             <i class="pi pi-sign-in"></i>
         </a>
         </div>
     </nav>
 </header>
 
-
-<router-outlet/>
+<router-outlet></router-outlet>

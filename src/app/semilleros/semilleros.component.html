@@ -1,0 +1,10 @@
+<div class="semilleros-container">
+    <h2>Semilleros Disponibles</h2>
+    <ul>
+      <li *ngFor="let semillero of semilleros">
+        {{ semillero.nombre }} - {{ semillero.descripcion }}
+        <button (click)="inscribirse(semillero.id)">Inscribirse</button>
+      </li>
+    </ul>
+  </div>
+  
