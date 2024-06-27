@@ -1,58 +1,43 @@
-// src/app/semilleros/semilleros.component.ts
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { SemillerosService } from './semilleros.service';
 
 @Component({
   selector: 'app-semilleros',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule  // Ensure ReactiveFormsModule is imported here
-  ],
-  template: `
-    <form [formGroup]="semilleroForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label>Nombre:</label>
-        <input type="text" formControlName="nombre">
-      </div>
-      <div>
-        <label>Descripción:</label>
-        <textarea formControlName="descripcion"></textarea>
-      </div>
-      <button type="submit" [disabled]="!semilleroForm.valid">Crear Semillero</button>
-    </form>
-
-    <div>
-      <button (click)="getAllSemilleros()">Cargar Todos los Semilleros</button>
-      <button (click)="getSemillero(1)">Cargar Semillero por ID</button>
-      <button (click)="updateSemillero(1)">Actualizar Semillero</button>
-      <button (click)="deleteSemillero(1)">Eliminar Semillero</button>
-    </div>
-  `,
-  styles: [
-    `input, textarea {
-      margin-bottom: 10px;
-      width: 100%;
-      padding: 8px;
-    }`
-  ]
+  templateUrl: './semilleros.component.html',
+  styleUrls: ['./semilleros.component.css'],
+  providers: [MessageService]
 })
 export class SemillerosComponent implements OnInit {
   semilleroForm!: FormGroup;
+  semilleros: any[] = [];
+  selectedSemillero: any;
+  displayDialog: boolean = false;
 
-  constructor(private fb: FormBuilder, private semillerosService: SemillerosService) {}
+  constructor(
+    private fb: FormBuilder,
+    private semillerosService: SemillerosService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.semilleroForm = this.fb.group({
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required]
     });
+    this.getAllSemilleros();
   }
 
   onSubmit(): void {
     if (this.semilleroForm.valid) {
       this.semillerosService.crearSemillero(this.semilleroForm.value).subscribe({
-        next: response => console.log('Semillero creado con éxito', response),
+        next: response => {
+          this.semilleros.push(response);
+          this.messageService.add({severity:'success', summary: 'Success', detail: 'Semillero creado con éxito'});
+          this.semilleroForm.reset();
+          this.displayDialog = false;
+        },
         error: error => console.error('Error al crear semillero', error)
       });
     }
@@ -60,30 +45,44 @@ export class SemillerosComponent implements OnInit {
 
   getAllSemilleros(): void {
     this.semillerosService.getAllSemilleros().subscribe({
-      next: semilleros => console.log('Todos los semilleros:', semilleros),
+      next: semilleros => this.semilleros = semilleros,
       error: error => console.error('Error al obtener semilleros', error)
     });
   }
 
-  getSemillero(id: number): void {
-    this.semillerosService.getSemillero(id).subscribe({
-      next: semillero => console.log('Semillero cargado:', semillero),
-      error: error => console.error('Error al cargar el semillero', error)
-    });
-  }
-
-  updateSemillero(id: number): void {
-    const updatedData = { nombre: 'Updated Name', descripcion: 'Updated Description' };
-    this.semillerosService.updateSemillero(id, updatedData).subscribe({
-      next: response => console.log('Semillero actualizado con éxito', response),
-      error: error => console.error('Error al actualizar semillero', error)
-    });
+  editSemillero(semillero: any): void {
+    this.selectedSemillero = { ...semillero };
+    this.semilleroForm.patchValue(this.selectedSemillero);
+    this.displayDialog = true;
   }
 
   deleteSemillero(id: number): void {
     this.semillerosService.deleteSemillero(id).subscribe({
-      next: response => console.log('Semillero eliminado con éxito', response),
+      next: response => {
+        this.semilleros = this.semilleros.filter(s => s.id !== id);
+        this.messageService.add({severity:'success', summary: 'Success', detail: 'Semillero eliminado con éxito'});
+      },
       error: error => console.error('Error al eliminar semillero', error)
     });
+  }
+
+  saveSemillero(): void {
+    if (this.selectedSemillero) {
+      this.semillerosService.updateSemillero(this.selectedSemillero.id, this.semilleroForm.value).subscribe({
+        next: response => {
+          const index = this.semilleros.findIndex(s => s.id === this.selectedSemillero.id);
+          this.semilleros[index] = response;
+          this.messageService.add({severity:'success', summary: 'Success', detail: 'Semillero actualizado con éxito'});
+          this.displayDialog = false;
+        },
+        error: error => console.error('Error al actualizar semillero', error)
+      });
+    } else {
+      this.onSubmit();
+    }
+  }
+
+  showDialog(): void {
+    this.displayDialog = true;
   }
 }

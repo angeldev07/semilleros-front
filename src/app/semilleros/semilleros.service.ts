@@ -1,38 +1,34 @@
 // src/app/semilleros/semilleros.service.ts
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Semillero } from './semillero.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SemillerosService {
-  private apiUrl = 'http://localhost:8080/api/semilleros';
+  private apiUrl = 'http://localhost:3000/api/semilleros'; // Cambia esto a la URL de tu API
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  // GET all semilleros
-  getAllSemilleros(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  crearSemillero(semillero: Semillero): Observable<Semillero> {
+    return this.http.post<Semillero>(this.apiUrl, semillero);
   }
 
-  // GET a single semillero by ID
-  getSemillero(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  getAllSemilleros(): Observable<Semillero[]> {
+    return this.http.get<Semillero[]>(this.apiUrl);
   }
 
-  // POST to create a new semillero
-  crearSemillero(semilleroData: any): Observable<any> {
-    return this.http.post(this.apiUrl, semilleroData);
+  getSemillero(id: number): Observable<Semillero> {
+    return this.http.get<Semillero>(`${this.apiUrl}/${id}`);
   }
 
-  // PUT to update a semillero by ID
-  updateSemillero(id: number, semilleroData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, semilleroData);
+  updateSemillero(id: number, semillero: Semillero): Observable<Semillero> {
+    return this.http.put<Semillero>(`${this.apiUrl}/${id}`, semillero);
   }
 
-  // DELETE a semillero by ID
-  deleteSemillero(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deleteSemillero(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
