@@ -1,15 +1,15 @@
 {
   "name": "semilleros-front",
   "version": "0.0.0",
-  "scripts": {
-    "start": "node index.js",
+ "scripts": {
+    "start": "node index.js", 
     "ng": "ng",
     "start:frontend": "ng serve",
-    "build": "ng build --prod",
-    "build:frontend": "ng build --prod",
+    "build": "ng build",
+    "build:frontend": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
-  },
+},
   "private": true,
   "dependencies": {
     "@angular/animations": "^17.2.0",
