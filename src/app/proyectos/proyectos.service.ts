@@ -5,24 +5,24 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class SemillerosService {
-  private apiUrl = 'http://localhost:3000/api/semilleros';
+export class ProyectosService {
+  private apiUrl = 'http://localhost:3000/api/proyectos';
 
   constructor(private http: HttpClient) {}
 
-  getAllSemilleros(): Observable<any[]> {
+  getAllProyectos(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-  crearSemillero(formData: FormData): Observable<any> {
+  crearProyecto(formData: FormData): Observable<any> {
     return this.http.post<any>(this.apiUrl, formData);
   }
 
-  updateSemillero(id: number, formData: FormData): Observable<any> {
+  updateProyecto(id: number, formData: FormData): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, formData);
   }
 
-  deleteSemillero(id: number): Observable<any> {
+  deleteProyecto(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }

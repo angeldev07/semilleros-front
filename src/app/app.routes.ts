@@ -56,6 +56,10 @@ export const routes: Routes = [
         loadChildren: () => import('./redes-sociales/redes-sociales.routes').then(m => m.REDES_SOCIALES_ROUTES)
       },
       {
+        path: 'proyectos',
+        loadChildren: () => import('./proyectos/proyectos.routes').then(m => m.PROYECTOS_ROUTES)
+      },
+      {
         path:'',
         pathMatch: 'full',
         redirectTo: 'dashboard'

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { LayoutService } from '../services/layout.service';
-import { MenuitemComponent } from '../menuitem/menuitem.component';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { MenuitemComponent } from '../menuitem/menuitem.component';
+import { LayoutService } from '../services/layout.service';
 
 @Component({
   selector: 'app-menu',
@@ -42,6 +42,7 @@ export class MenuComponent implements OnInit {
           { label: 'Dashboard', icon: 'pi pi-fw pi-chart-bar', routerLink: ['./dashboard'] },
           { label: 'Configuracion', icon: 'pi pi-fw pi-cog', routerLink: ['./configuracion'] },
           { label: 'Semilleros', icon: 'pi pi-fw pi-briefcase', routerLink: ['./semilleros'] },
+          { label: 'Projectos', icon: 'pi pi-fw pi-briefcase', routerLink: ['./proyectos'] },
           { label: 'Eventos', icon: 'pi pi-fw pi-calendar', routerLink: ['./eventos'] },
           { label: 'Publicaciones', icon: 'pi pi-fw pi-map', routerLink: ['./publicaciones'] },
           { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['./usuarios'] },
