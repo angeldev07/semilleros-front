@@ -55,19 +55,6 @@ const upload = multer({
   limits: { fileSize: 100 * 1024 * 1024 } // Limite de tamaño de archivo de 100 MB
 });
 
-// Función para validar y convertir los campos antes de insertarlos en la base de datos
-const validateAndConvertFields = (fields) => {
-  return {
-    semillero_id: fields.semillero_id ? parseInt(fields.semillero_id, 10) : null,
-    nombre: fields.nombre || null,
-    descripcion: fields.descripcion || null,
-    archivo_url: fields.archivo_url || null,
-    fecha_inicio: fields.fecha_inicio || null,
-    fecha_fin: fields.fecha_fin || null,
-    calificacion: fields.calificacion ? parseInt(fields.calificacion, 10) : null,
-  };
-};
-
 // Endpoint para obtener todos los semilleros
 app.get('/api/semilleros', async (req, res) => {
   try {
@@ -141,39 +128,88 @@ app.get('/api/proyectos', async (req, res) => {
 
 // Endpoint para crear un nuevo proyecto
 app.post('/api/proyectos', upload.single('archivo'), async (req, res) => {
-  const fields = validateAndConvertFields(req.body);
+  const { semillero_id, nombre, descripcion, fecha_inicio, fecha_fin, calificacion } = req.body;
   const archivo_url = req.file ? `/uploads/${req.file.filename}` : null;
 
-  try {
-    const result = await pool.query(
-      'INSERT INTO proyectos (semillero_id, nombre, descripcion, archivo_url, fecha_inicio, fecha_fin, calificacion) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [fields.semillero_id, fields.nombre, fields.descripcion, archivo_url, fields.fecha_inicio, fields.fecha_fin, fields.calificacion]
-    );
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error('Error al crear proyecto:', err);
-    res.status(500).send('Server error');
+  // Validar y ajustar valores de fecha
+  const validFechaInicio = fecha_inicio ? fecha_inicio : null;
+  const validFechaFin = fecha_fin ? fecha_fin : null;
+
+  if (archivo_url && path.extname(archivo_url) === '.zip') {
+    // Extraer archivos del .zip si es necesario
+    const zipPath = path.join(__dirname, archivo_url);
+    fs.createReadStream(zipPath)
+      .pipe(unzipper.Extract({ path: uploadsDir }))
+      .on('close', async () => {
+        try {
+          const result = await pool.query(
+            'INSERT INTO proyectos (semillero_id, nombre, descripcion, archivo_url, fecha_inicio, fecha_fin, calificacion) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [semillero_id, nombre, descripcion, archivo_url, validFechaInicio, validFechaFin, calificacion]
+          );
+          res.json(result.rows[0]);
+        } catch (err) {
+          console.error('Error al crear proyecto:', err);
+          res.status(500).send('Server error');
+        }
+      });
+  } else {
+    try {
+      const result = await pool.query(
+        'INSERT INTO proyectos (semillero_id, nombre, descripcion, archivo_url, fecha_inicio, fecha_fin, calificacion) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+        [semillero_id, nombre, descripcion, archivo_url, validFechaInicio, validFechaFin, calificacion]
+      );
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error('Error al crear proyecto:', err);
+      res.status(500).send('Server error');
+    }
   }
 });
 
 // Endpoint para actualizar un proyecto
 app.put('/api/proyectos/:id', upload.single('archivo'), async (req, res) => {
   const { id } = req.params;
-  const fields = validateAndConvertFields(req.body);
-  const newArchivoUrl = req.file ? `/uploads/${req.file.filename}` : fields.archivo_url;
+  const { semillero_id, nombre, descripcion, archivo_url, fecha_inicio, fecha_fin, calificacion } = req.body;
+  const newArchivoUrl = req.file ? `/uploads/${req.file.filename}` : archivo_url;
 
-  try {
-    const result = await pool.query(
-      'UPDATE proyectos SET semillero_id = $1, nombre = $2, descripcion = $3, archivo_url = $4, fecha_inicio = $5, fecha_fin = $6, calificacion = $7 WHERE id = $8 RETURNING *',
-      [fields.semillero_id, fields.nombre, fields.descripcion, newArchivoUrl, fields.fecha_inicio, fields.fecha_fin, fields.calificacion, id]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).send('Proyecto no encontrado');
+  // Validar y ajustar valores de fecha
+  const validFechaInicio = fecha_inicio ? fecha_inicio : null;
+  const validFechaFin = fecha_fin ? fecha_fin : null;
+
+  if (newArchivoUrl && path.extname(newArchivoUrl) === '.zip') {
+    // Extraer archivos del .zip si es necesario
+    const zipPath = path.join(__dirname, newArchivoUrl);
+    fs.createReadStream(zipPath)
+      .pipe(unzipper.Extract({ path: uploadsDir }))
+      .on('close', async () => {
+        try {
+          const result = await pool.query(
+            'UPDATE proyectos SET semillero_id = $1, nombre = $2, descripcion = $3, archivo_url = $4, fecha_inicio = $5, fecha_fin = $6, calificacion = $7 WHERE id = $8 RETURNING *',
+            [semillero_id, nombre, descripcion, newArchivoUrl, validFechaInicio, validFechaFin, calificacion, id]
+          );
+          if (result.rows.length === 0) {
+            return res.status(404).send('Proyecto no encontrado');
+          }
+          res.json(result.rows[0]);
+        } catch (err) {
+          console.error('Error al actualizar proyecto:', err);
+          res.status(500).send('Server error');
+        }
+      });
+  } else {
+    try {
+      const result = await pool.query(
+        'UPDATE proyectos SET semillero_id = $1, nombre = $2, descripcion = $3, archivo_url = $4, fecha_inicio = $5, fecha_fin = $6, calificacion = $7 WHERE id = $8 RETURNING *',
+        [semillero_id, nombre, descripcion, newArchivoUrl, validFechaInicio, validFechaFin, calificacion, id]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).send('Proyecto no encontrado');
+      }
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error('Error al actualizar proyecto:', err);
+      res.status(500).send('Server error');
     }
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error('Error al actualizar proyecto:', err);
-    res.status(500).send('Server error');
   }
 });
 
