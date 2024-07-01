@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  api: 'http://localhost:8080',
+  api: 'https://siredseufps2024j-53bcd51baaf2.herokuapp.com/api',
 };

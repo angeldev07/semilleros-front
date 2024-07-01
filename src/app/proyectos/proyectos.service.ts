@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProyectosService {
-  private apiUrl = 'https://siredseufps2024j.herokuapp.com/api/proyectos';
+  private apiUrl = 'https://siredseufps2024j-53bcd51baaf2.herokuapp.com/api/proyectos';
   constructor(private http: HttpClient) {}
 
   getAllProyectos(): Observable<any[]> {

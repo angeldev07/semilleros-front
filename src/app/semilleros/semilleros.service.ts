@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SemillerosService {
-  private apiUrl = 'https://siredseufps2024j.herokuapp.com/api/semilleros';
+  private apiUrl = 'https://siredseufps2024j-53bcd51baaf2.herokuapp.com/api/semilleros';
 
   constructor(private http: HttpClient) {}
 
