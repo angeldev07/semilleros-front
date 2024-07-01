@@ -2,9 +2,11 @@
   "name": "semilleros-front",
   "version": "0.0.0",
   "scripts": {
+    "start": "node index.js", 
     "ng": "ng",
-    "start": "ng serve",
+    "start:frontend": "ng serve",
     "build": "ng build",
+    "build:frontend": "ng build --prod",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
